@@ -1,7 +1,7 @@
 # PGP Anywhere
-EMail client for the privacy email provider [ProtonMail], located in Swiss.
+Install via [Chrome Webstore]. Encrypt and decrypt PGP wherever you are!
 >License: GNUv2
-Install via [Chrome Webstore]
+
 
 # Features
 - Hashed using [bCrypt] (10 iterations)
