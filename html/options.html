@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>PGP Anywhere - Options</title>
+		<link rel="stylesheet" href="bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="skin.css" media="screen">
+		<script src="../js/jquery-1.8.3.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/sjcl.js"></script>
+		<script src="../js/sha.js"></script>
+		<script src="../js/isaac.min.js"></script>
+		<script src="../js/bCrypt.min.js"></script>
+		<script src="../js/pwstrength-bootstrap-1.2.5.min.js"></script>
+		<script src="../js/options.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="options.html">PGP Anywhere</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li class="active"><a href="options.html">Options</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="mailto:nicolas.giese@web.de">Contact</a></li>
+				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese">More</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+		<div style="width:90%; margin:auto; margin-top:50px;" class="well bs-component">
+			<form class="form-horizontal">
+			  <fieldset>
+				<legend>Settings</legend>
+				<div class="form-group">
+					<label for="inputPassword" class="col-lg-2 control-label">
+						Security<br>
+						<img src="/img/cloud.png" title="Using a master password enables Cloud Synchronization" style="cursor:help; margin-top:6px;">
+					</label>
+					<div class="col-lg-10">
+						<input type="password" class="form-control" id="inputMasterPassword" placeholder="Password">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="selectDecKey" class="col-lg-2 control-label">Manage your Keys</label>
+					<div class="col-lg-10">
+						<div class="input-group">
+							<select class="form-control" id="selectDecKey"><option value="addnew">Add new key</option></select>
+							<span class="input-group-btn">
+								<button type="submit" class="btn btn-default" style="width:120px;" id="removebutton" disabled>Remove</button>
+							</span>
+						</div>
+						<div id="addkeyform">
+							<textarea class="form-control" rows="3" id="addpgpdeckey" placeholder="Paste private or public key..."></textarea>
+							<input type="text" class="form-control" id="inputEmail" placeholder="EMail">
+							<div class="input-group">
+								<input type="password" class="form-control" id="savekeypassword" placeholder="Key Password" disabled>
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-primary" style="width:120px;" id="addbutton">Save</button>
+								</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+				  <div class="col-lg-10 col-lg-offset-2">
+					<button type="reset" class="btn btn-default" id="flushbutton">Delete all data</button>
+					<button type="reset" class="btn btn-info" id="syncbutton">Sync all data</button>
+					<button type="submit" class="btn btn-primary" id="submitbutton">Save Changes</button>
+				  </div>
+				</div>
+			  </fieldset>
+			</form>
+		</div>
+	</body>
+</html>
