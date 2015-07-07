@@ -55,7 +55,7 @@ $(document).ready(function() {
 						$("#inputEmail").val(container[i].email);
 						$("#addpgpdeckey").val(container[i].key);
 					}
-				}	
+				}
 				$("#savekeypassword").removeAttr("disabled");
 			}
 			else 
@@ -234,7 +234,12 @@ function onsyncload()
 function onsyncset()
 {
 	syncsetcount++;
-	if(syncsetcount>=2) window.close();
+	if(syncsetcount>=2) 
+	{
+		chrome.runtime.sendMessage({ msg: "unlock", "auth":"" }, function(data) {
+			window.close();
+		});
+	}
 }
 
 function createhash(str, algo, func)
