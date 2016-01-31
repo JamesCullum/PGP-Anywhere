@@ -1,4 +1,4 @@
-var decpw = false;
+var decpw = false, syncloadcount = 0;
 
 init();
 

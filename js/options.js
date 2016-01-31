@@ -1,5 +1,5 @@
 var masterpw = "", syncloadcount = 0, syncsetcount = 0;
-var bcrypt = new bCrypt(), master_placeholder = "n0Change_To_Save";
+var bcrypt = new bCrypt();
 
 $(document).ready(function() {
 	var randParanoia = 10;
@@ -126,7 +126,7 @@ $(document).ready(function() {
 			}).catch(function(error) {
 				alert("Error: "+error);
 			});
-		}, 20);
+		}, 30);
 	});	
 	
 	$("#removebutton").click(function(e) {

@@ -3,7 +3,7 @@
 
 	"name": "PGP Anywhere",
 	"description": "Encrypt and decrypt PGP on the go",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"icons": {
 		"16": "img/favicon_16.png",
 		"48": "img/favicon_48.png",
