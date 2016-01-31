@@ -11,6 +11,11 @@ $(document).ready(function() {
 	}
 	else loadkeyrings();
 	
+	$("#decpgptxt").keyup(function() {
+		if( $(this).val().length ) $("#submitbutton").removeClass("disabled");
+		else $("#submitbutton").addClass("disabled");
+		$("#decpgptxt").closest(".form-group").removeClass("has-error");
+	});
 	$("#addbutton").click(function(e) {
 		e.preventDefault();
 		
@@ -35,12 +40,15 @@ $(document).ready(function() {
 	$("#submitbutton").click(function(e) {
 		e.preventDefault();
 		
-		var toenc = $("#decpgptxt").val();
-		if( !toenc.length ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
-		$("#decpgptxt").closest(".form-group").removeClass("has-error");
-		
 		var encindex = $("#selectDecKey").val();
 		var infosplit = encindex.split("|");
+		
+		var toenc = $("#decpgptxt").val();
+		if( !toenc.length || ( infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') ) ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
+		$("#decpgptxt").closest(".form-group").removeClass("has-error");
+		
+		var befText = $(this).html();
+		$(this).html('Processing... <i class="fa fa-cog fa-spin"></i>').addClass("disabled");
 		
 		if(infosplit[1] == "0")
 		{
@@ -62,8 +70,10 @@ $(document).ready(function() {
 			if(retdec === false) return alert("Key Password invalid");
 			pgpMessage = openpgp.message.readArmored(toenc);
 			openpgp.decryptMessage(privateKey, pgpMessage).then(function(plaintext) {
+				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(plaintext);
 			}).catch(function(error) {
+				$("#submitbutton").html(befText).removeClass("disabled");
 				alert("Decryption Error: "+error);
 			});
 		}
@@ -75,23 +85,26 @@ $(document).ready(function() {
 			if( !key.length ) return alert("internal key error, please re-add public key for "+infosplit[0]);
 			var publicKey = openpgp.key.readArmored(key).keys[0];
 			openpgp.encryptMessage(publicKey, toenc).then(function(pgpMessage) {
+				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(pgpMessage);
 			}).catch(function(error) {
+				$("#submitbutton").html(befText).removeClass("disabled");
 				alert("Error: "+error);
 			});
 		}
 	});
 	$("#expandbutton").click(function() {
+		$(this).blur();
 		sizestate = !sizestate;
 		if(sizestate)
 		{
-			$(this).html("&raquo;");
+			$(this).html('<i class="fa fa-compress"></i>');
 			$("#decpgptxt").animate({"height":"275px"});
 			$("#popupdiv").animate({"width":"600px","height":"450px"});
 		}
 		else
 		{
-			$(this).html("&laquo;");
+			$(this).html('<i class="fa fa-arrows-alt"></i>');
 			$("#decpgptxt").animate({"height":"100px"});
 			$("#popupdiv").animate({"width":"300px","height":"270px"});
 		}
@@ -100,6 +113,7 @@ $(document).ready(function() {
 
 function onkeysel()
 {
+	$("#decpgptxt").closest(".form-group").removeClass("has-error");
 	if($("#selectDecKey").val()=="addnew")
 	{
 		$("#submitbutton").attr("disabled","disabled");
@@ -115,9 +129,18 @@ function onkeysel()
 function loadkeyrings()
 {
 	var container = openkeyring("private");
-	for(var i=0;i<container.length;i++) $("#selectDecKey").append('<option value="'+container[i].email+'|0">[DEC] '+container[i].email+'</option>');
+	if(container.length)
+	{
+		$("#selectDecKey").append('<optgroup label="Private Keys for Decryption" id="privateKeyGroup"></div>');
+		for(var i=0;i<container.length;i++) $("#privateKeyGroup").append('<option value="'+container[i].email+'|0">'+container[i].email+'</option>');
+	}
+	
 	var container = openkeyring("public");
-	for(var i=0;i<container.length;i++) $("#selectDecKey").append('<option value="'+container[i].email+'|1">[ENC] '+container[i].email+'</option>');
+	if(container.length)
+	{
+		$("#selectDecKey").append('<optgroup label="Public Keys for Encryption" id="publicKeyGroup"></div>');
+		for(var i=0;i<container.length;i++) $("#publicKeyGroup").append('<option value="'+container[i].email+'|1">'+container[i].email+'</option>');
+	}
 	
 	if( $("option","#selectDecKey").length > 1 ) $("#addnew").remove();
 	onkeysel();

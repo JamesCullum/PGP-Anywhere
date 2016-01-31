@@ -1,0 +1,32 @@
+.progress
+{
+	margin:5px 0;
+	background-color: #EBEBE0;
+}
+
+.spacer
+{
+	height:5px;
+}
+
+#removebutton, #addbutton
+{
+	width:120px;
+}
+
+.addkeyform, .center-container, #addkeyform
+{
+	position:relative;
+}
+
+.center-container
+{
+	width:90%; 
+	margin:auto; 
+}
+
+.info-alert a.btn
+{
+	margin-top:-5px; 
+	margin-right:-20px;
+}

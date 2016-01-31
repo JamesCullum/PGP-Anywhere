@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>PGP Anywhere - Options</title>
-		<link rel="stylesheet" href="bootstrap.min.css" media="screen">
-		<link rel="stylesheet" href="skin.css" media="screen">
+		<title>Options | PGPAnywhere</title>
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
+		<link rel="stylesheet" href="css/skin.css" media="screen">
+		
 		<script src="../js/jquery-1.8.3.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/openpgp.min.js"></script>
 		<script src="../js/sjcl.js"></script>
 		<script src="../js/sha.js"></script>
 		<script src="../js/isaac.min.js"></script>
@@ -36,35 +40,50 @@
 			</div>
 		  </div>
 		</nav>
-		<div style="width:90%; margin:auto; margin-top:50px;" class="well bs-component">
+		<div class="alert alert-dismissible alert-warning visible-lg info-alert center-container" style="margin-top:40px;">
+			<p>
+				Please support the development of this extension by rating & sharing!
+				<a class="btn btn-primary btn-sm pull-right" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate">Rate Now</a>
+			</p>
+		</div>
+		<div style="margin-top:10px;" class="well bs-component center-container">
 			<form class="form-horizontal">
 			  <fieldset>
 				<legend>Settings</legend>
-				<div class="form-group">
+				<div class="form-group masterGroup">
 					<label for="inputPassword" class="col-lg-2 control-label">
-						Security<br>
-						<img src="/img/cloud.png" title="Using a master password enables Cloud Synchronization" style="cursor:help; margin-top:6px;">
+						Master Password
 					</label>
 					<div class="col-lg-10">
-						<input type="password" class="form-control" id="inputMasterPassword" placeholder="Password">
+						<input type="password" class="form-control" id="inputMasterPassword" placeholder="Enter master password...">
+						<input type="password" class="form-control" id="inputMasterPassword2" placeholder="Repeat master password" style="display:none;">
+						<span class="help-block">Setting a master password will encrypt the local key database. Only encrypted databases will be synced to new clients.</span>
 					</div>
 				</div>
-				<div class="form-group">
+				<div class="form-group keyGroup">
 					<label for="selectDecKey" class="col-lg-2 control-label">Manage your Keys</label>
 					<div class="col-lg-10">
 						<div class="input-group">
 							<select class="form-control" id="selectDecKey"><option value="addnew">Add new key</option></select>
 							<span class="input-group-btn">
-								<button type="submit" class="btn btn-default" style="width:120px;" id="removebutton" disabled>Remove</button>
+								<button type="submit" class="btn btn-default" id="removebutton" disabled>Remove</button>
 							</span>
 						</div>
+						<span class="help-block">PGPAnywhere manages all of your keys. Paste public keys of other people to encrypt data or paste your private key to decrypt data sent to you.</span>
 						<div id="addkeyform">
-							<textarea class="form-control" rows="3" id="addpgpdeckey" placeholder="Paste private or public key..."></textarea>
-							<input type="text" class="form-control" id="inputEmail" placeholder="EMail">
+							<textarea class="form-control" rows="5" id="addpgpdeckey" placeholder="Paste private or public key..."></textarea>
+							<div class="spacer"></div>
 							<div class="input-group">
-								<input type="password" class="form-control" id="savekeypassword" placeholder="Key Password" disabled>
+								<input type="text" class="form-control" id="inputEmail" placeholder="Name or email address of key owner">
 								<span class="input-group-btn">
-									<button type="submit" class="btn btn-primary" style="width:120px;" id="addbutton">Save</button>
+									<button type="submit" class="btn btn-info disabled" id="generatekey">Generate Keys</button>
+								</span>
+							</div>
+							<div class="spacer"></div>
+							<div class="input-group">
+								<input type="password" class="form-control" id="savekeypassword" placeholder="Password for private key" disabled>
+								<span class="input-group-btn">
+									<button type="submit" class="btn btn-primary disabled"  id="addbutton">Save</button>
 								</span>
 							</div>
 						</div>
@@ -72,9 +91,8 @@
 				</div>
 				<div class="form-group">
 				  <div class="col-lg-10 col-lg-offset-2">
-					<button type="reset" class="btn btn-default" id="flushbutton">Delete all data</button>
-					<button type="reset" class="btn btn-info" id="syncbutton">Sync all data</button>
 					<button type="submit" class="btn btn-primary" id="submitbutton">Save Changes</button>
+					<button type="reset" class="btn btn-default" id="flushbutton">Delete all data</button>
 				  </div>
 				</div>
 			  </fieldset>

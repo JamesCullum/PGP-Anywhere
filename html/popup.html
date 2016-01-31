@@ -2,7 +2,10 @@
 <html>
 	<head>
 		<title>PGP Anywhere</title>
-		<link rel="stylesheet" href="bootstrap.min.css" media="screen">
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
+		
 		<script src="../js/jquery-1.8.3.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
 		<script src="../js/openpgp.min.js"></script>
@@ -11,17 +14,12 @@
 		<script src="../js/pgp_popup.js"></script>
 	</head>
 	<body>
-		<div style="width:300px; height:270px;" id="popupdiv">
+		<div id="popupdiv" style="width:300px; height:270px; padding-top:10px;">
 			<fieldset>
 				<div class="form-group">
 					<label for="selectDecKey" class="col-lg-2 control-label">Key</label>
 					<div class="col-lg-10">
-						<div class="input-group">
-							<select class="form-control" id="selectDecKey"><option value="addnew" id="addnew">No key selected</option></select>
-							<span class="input-group-btn">
-								<button type="submit" class="btn btn-default" id="editbutton">Edit</button>
-							</span>
-						</div>
+						<select class="form-control" id="selectDecKey"><option value="addnew" id="addnew">No key selected</option></select>
 					</div>
 				</div>
 				<div class="form-group">
@@ -32,8 +30,9 @@
 				</div>
 				<div class="form-group">
 					<div class="col-lg-10 col-lg-offset-2">
-						<button type="submit" class="btn btn-info" id="expandbutton">&laquo;</button>
-						<button type="submit" class="btn btn-primary" id="submitbutton" style="float:right;" disabled>Encrypt</button>
+						<button type="submit" class="btn btn-info" id="expandbutton"><i class="fa fa-arrows-alt"></i></button>
+						<button type="submit" class="btn btn-default" id="editbutton">Options</button>
+						<button type="submit" class="btn btn-primary pull-right disabled" id="submitbutton">Encrypt</button>
 					</div>
 				</div>
 			</fieldset>
