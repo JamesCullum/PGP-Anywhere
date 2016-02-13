@@ -37,7 +37,11 @@ chrome.runtime.onInstalled.addListener(function(details){
     if(details.reason == "install") 
 	{
         chrome.storage.sync.get("pgpanywhere_sync_set", function (sync_container) {
-			if(jQuery.isEmptyObject(sync_container)) return;
+			if(jQuery.isEmptyObject(sync_container)) 
+			{
+				window.open("html/tutorial.html");
+				return;
+			}
 
 			syncloadcount = 0;
 			chrome.storage.sync.get("pgpanywhere_sync_container_settings", function (sync_container) {

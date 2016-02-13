@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Tutorial | PGPAnywhere</title>
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+		<link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
+		<link rel="stylesheet" href="css/skin.css" media="screen">
+		
+		<script src="../js/jquery-1.8.3.min.js"></script>
+		<script src="../js/bootstrap.min.js"></script>
+		<script src="../js/openpgp.min.js"></script>
+		<script src="../js/sjcl.js"></script>
+		<script src="../js/sha.js"></script>
+		<script src="../js/isaac.min.js"></script>
+		<script src="../js/bCrypt.min.js"></script>
+		<script src="../js/pwstrength-bootstrap-1.2.5.min.js"></script>
+		<script src="../js/options.js"></script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+			<div class="navbar-header">
+			  <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			  </button>
+			  <a class="navbar-brand" href="options.html">PGP Anywhere</a>
+			</div>
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			  <ul class="nav navbar-nav">
+				<li><a href="options.html">Options</a></li>
+				<li class="active"><a href="tutorial.html">Tutorial</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav navbar-right">
+				<li><a href="mailto:nicolas.giese@web.de">Contact</a></li>
+				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese">More</a></li>
+			  </ul>
+			</div>
+		  </div>
+		</nav>
+		<div class="bs-component center-container">
+			<div class="row">
+				<div class="col-lg-6">
+					<h2>Welcome to PGP Anywhere</h2>
+					<p>
+						PGP Anywhere saves and uses all your public and private keys and enables you to take them with you by synchronizing them to other Chrome instances.
+						Manage your keys in it and encrypt or decrypt messages without leaving the page you currently are on. 
+						PGP Anywhere uses <a href="http://openpgpjs.org/" target="_new">OpenPGP</a> for messages.
+						Your key storage is encrypted by <a href="http://bitwiseshiftleft.github.io/sjcl/" target="_new">SJCL</a> and hashed using <a href="https://en.wikipedia.org/wiki/Bcrypt" target="_new">bCrypt</a>.
+					</p>
+				</div>
+				<div class="col-lg-6" style="vertical-align:middle;">
+					<div class="pull-right" style="text-align:center;">
+						<img src="../img/howto1.png" alt="Infogram" style="max-width:90%;"><br>
+					</div>
+				</div>
+			</div>
+			<hr style="margin-top:25px;">
+			<div class="row" style="margin-top:50px;">
+				<div class="col-lg-6" style="vertical-align:middle;">
+					<div class="pull-right" style="text-align:center;">
+						<img src="../img/howto2.gif" alt="Infogram" style="max-width:100%; box-shadow:0 0 2px #888;"><br>
+					</div>
+				</div>
+				<div class="col-lg-6" style="text-align:right;">
+					<h2 style="margin-top:0;">Step 1 - Set master password</h2>
+					<p>
+						<b>Open up the <a href="options.html" target="_newtab">options</a> now to start the setup.</b> 
+						You first step should be to set a strong master password that will enable device synchronization and makes sure no one but you can access your key storage.
+						All your data will always be stored encrypted from that point on. Use the password-o-meter to see how good your password is.
+						Use a generated password from a password manager with multi-factor authentification for added security.
+					</p>
+				</div>
+			</div>
+			<div class="row" style="margin-top:75px;">
+				<div class="col-lg-6">
+					<h2 style="margin-top:0;">Step 2 - Generate or Import Key Pair</h2>
+					<p>
+						You can either generate a new key pair as shown here or <b>import your OpenPGP keys</b> by pasting and saving them.
+						PGP Anywhere automatically detects your key. Save your key password for private keys as well, otherwise decryption won't be possible.
+					</p>
+				</div>
+				<div class="col-lg-6" style="vertical-align:middle;">
+					<div class="pull-right" style="text-align:center;">
+						<img src="../img/howto3.gif" alt="Infogram" style="max-width:100%; box-shadow:0 0 2px #888;"><br>
+					</div>
+				</div>
+			</div>
+			<div class="row" style="margin-top:75px;">
+				<div class="col-lg-6" style="vertical-align:middle;">
+					<div class="pull-right" style="text-align:center;">
+						<img src="../img/howto4.gif" alt="Infogram" style="max-width:100%; box-shadow:0 0 2px #888;"><br>
+					</div>
+				</div>
+				<div class="col-lg-6" style="text-align:right;">
+					<h2 style="margin-top:0;">Step 3 - Use PGP Anywhere everywhere</h2>
+					<p>
+						Just click on the small icon next to your address bar to open up the menu. Use the small arrow to expand the field in case the text is longer.
+						Select the correct key, either to encrypt or to decrypt, enter your message and submit it using the according button. 
+						You can switch between keys as much as you want.<br><br>
+						Congratulations, you are now ready to save the world and use PGP both convenient and safe.<br><br>
+						<a class="btn btn-primary btn-sm pull-right" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate" style="text-align:right;">
+							Know a friend that can use a tool like this?<br>Rate & share now!
+						</a>
+					</p>
+				</div>
+			</div>
+			<div class="row" style="margin-top:50px;">
+				<div class="col-lg-12">
+					<h4>Credits and Attribution</h4>
+					<p>
+						<a href="https://www.iconfinder.com/PixelBuddha">Pixel Buddha</a> & <a href="https://www.iconfinder.com/Vecteezy">Vecteezy</a> &raquo; Licensed Image
+					</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
