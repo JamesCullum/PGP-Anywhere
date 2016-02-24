@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>PGP Anywhere - Unlock</title>
-		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
+		<title>__MSG_unlock__ | PGP Anywhere</title>
+		
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		
 		<script src="../js/jquery-1.8.3.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
 		<script src="../js/sjcl.js"></script>
@@ -10,28 +12,28 @@
 		<script src="../js/isaac.min.js"></script>
 		<script src="../js/bCrypt.min.js"></script>
 		<script src="../js/unlock.js"></script>
+		<script src="../js/translate.js"></script>
 	</head>
 	<body style="width:400px;">
 		<div class="modal-dialog" style="margin:0; width:100%;">
 			<div class="modal-content" style="border:none; box-shadow:none;">
 			  <div class="modal-header">
-				<h4 class="modal-title">Decrypt your account informations</h4>
+				<h4 class="modal-title l18n">__MSG_unlock_title__</h4>
 			  </div>
 			  <div class="modal-body">
 				<div class="alert alert-warning">
-				  <h4>Password required</h4>
-				  Your account details are encrypted with a master password.
-				  If you forgot your master password, you can reset your credentials and re-enter them.
+				  <h4 class="l18n">__MSG_pass_required__</h4>
+				  <span class="l18n">__MSG_unlock_prompt__</span>
 				</div>
 				<div class="form-group">
 				  <div class="input-group" style="width:100%;">
-					<input type="password" class="form-control" id="decmasterpw" placeholder="Password">
+					<input type="password" class="form-control l18n" id="decmasterpw" placeholder="__MSG_master_password__">
 				  </div>
 				</div>
 			  </div>
 			  <div class="modal-footer">
-				<button type="button" class="btn btn-default" id="dellog" data-dismiss="modal" style="float:left;">Delete login</button>
-				<button type="button" class="btn btn-primary" id="declogin">Decrypt</button>
+				<button type="button" class="btn btn-default l18n" id="dellog" data-dismiss="modal" style="float:left;">__MSG_delete_data__</button>
+				<button type="button" class="btn btn-primary l18n" id="declogin">__MSG_decrypt__</button>
 			  </div>
 			</div>
 		</div>

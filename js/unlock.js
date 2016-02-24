@@ -5,9 +5,12 @@ $(document).ready(function() {
 	$("#decmasterpw").focus();
 
 	$("#dellog").click(function() {
-		chrome.storage.sync.clear();
-		localStorage.clear();
-		window.location = "options.html";
+		if(confirm(chrome.i18n.getMessage("delete_confirm")))
+		{
+			chrome.storage.sync.clear();
+			localStorage.clear();
+			window.location = "options.html";
+		}
 	});
 	$("#declogin").click(function() {
 		var decpw = $("#decmasterpw").val();
@@ -15,7 +18,7 @@ $(document).ready(function() {
 		
 		$("#declogin").attr("disabled","disabled");
 		checkhash(decpw,loadval("pgpanywhere_encrypted_hash",false), function(result) {
-			if(result) 
+			if(result)
 			{
 				chrome.runtime.sendMessage({ msg: "unlock", "auth": decpw });
 				window.location = "popup.html";

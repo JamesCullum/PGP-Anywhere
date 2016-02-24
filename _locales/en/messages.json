@@ -1,0 +1,179 @@
+{
+	"manifest_description": {
+		"message":"Encrypt and decrypt PGP on the go"
+	},
+	"generating": {
+		"message":"Generating..."
+	},
+	"delete_confirm": {
+		"message":"Are you sure that you want to remove all data? This includes your login informations and pgp keys!"
+	},
+	"password_no_match": {
+		"message":"Master Passwords don't match!"
+	},
+	"invalid_key": {
+		"message":"This is not a valid PGP Key"
+	},
+	"add_key": {
+		"message":"Add new key"
+	},
+	"require_identity": {
+		"message":"Please fill in a name or email address"
+	},
+	"private_key_label": {
+		"message":"Private Keys for Decryption"
+	},
+	"public_key_label": {
+		"message":"Public Keys for Encryption"
+	},
+	"option": {
+		"message":"Options"
+	},
+	"tutorial": {
+		"message":"Tutorial"
+	},
+	"contact": {
+		"message":"Contact"
+	},
+	"more": {
+		"message":"More"
+	},
+	"support_prompt": {
+		"message":"Please support the development of this extension by rating & sharing!"
+	},
+	"support_button": {
+		"message":"Rate Now"
+	},
+	"settings": {
+		"message":"Settings"
+	},
+	"master_password": {
+		"message":"Master Password"
+	},
+	"password_prompt": {
+		"message":"Enter master password..."
+	},
+	"password_confirmation": {
+		"message":"Repeat master password..."
+	},
+	"password_info": {
+		"message":"Setting a master password will encrypt the local key database. Only encrypted databases will be synced to new clients."
+	},
+	"manage_keys": {
+		"message":"Manage your Keys"
+	},
+	"remove": {
+		"message":"Remove"
+	},
+	"function_info": {
+		"message":"PGP Anywhere manages all of your keys. Paste public keys of other people to encrypt data or paste your private key to decrypt data sent to you."
+	},
+	"paste_key": {
+		"message":"Paste private or public key..."
+	},
+	"key_owner_prompt": {
+		"message":"Name or email address of key owner"
+	},
+	"generate_key": {
+		"message":"Generate Keys"
+	},
+	"private_pass": {
+		"message":"Password for private key"
+	},
+	"save": {
+		"message":"Save"
+	},
+	"save_changes": {
+		"message":"Save Changes"
+	},
+	"delete_data": {
+		"message":"Delete all data"
+	},
+	"key": {
+		"message":"Key"
+	},
+	"no_key_selected": {
+		"message":"No key selected"
+	},
+	"message": {
+		"message":"Message"
+	},
+	"processing": {
+		"message":"Processing..."
+	},
+	"internal_key_error": {
+		"message":"Internal key error, please re-add private key"
+	},
+	"key_pass_error": {
+		"message":"Key Password invalid"
+	},
+	"encrypt": {
+		"message":"Encrypt"
+	},
+	"decrypt": {
+		"message":"Decrypt"
+	},
+	"verdict_weak": {
+		"message":"Weak"
+	},
+	"verdict_normal": {
+		"message":"Normal"
+	},
+	"verdict_medium": {
+		"message":"Medium"
+	},
+	"verdict_strong": {
+		"message":"Strong"
+	},
+	"verdict_very_strong": {
+		"message":"Very Strong"
+	},
+	"unlock": {
+		"message":"Unlock"
+	},
+	"unlock_title": {
+		"message":"Decrypt your account informations"
+	},
+	"pass_required": {
+		"message":"Password required"
+	},
+	"unlock_prompt": {
+		"message":"Your account details are encrypted with a master password. If you forgot your master password, you can reset your credentials and re-enter them."
+	},
+	"tutorial_welcome": {
+		"message":"Welcome to PGP Anywhere"
+	},
+	"tutorial_intro": {
+		"message":"PGP Anywhere saves and uses all your public and private keys and enables you to take them with you by synchronizing them to other Chrome instances. Manage your keys in it and encrypt or decrypt messages without leaving the page you currently are on. PGP Anywhere uses <a href=\"http://openpgpjs.org/\" target=\"_new\">OpenPGP</a> for messages. Your key storage is encrypted by <a href=\"http://bitwiseshiftleft.github.io/sjcl/\" target=\"_new\">SJCL</a> and hashed using <a href=\"https://en.wikipedia.org/wiki/Bcrypt\" target=\"_new\">bCrypt</a>."
+	},
+	"tutorial1_title": {
+		"message":"Step 1 - Set master password"
+	},
+	"tutorial1_body": {
+		"message":"<b>Open up the <a href=\"options.html\" target=\"_newtab\">options</a> now to start the setup.</b> You first step should be to set a strong master password that will enable device synchronization and makes sure no one but you can access your key storage. All your data will always be stored encrypted from that point on. Use the password-o-meter to see how good your password is. Use a generated password from a password manager with multi-factor authentification for added security."
+	},
+	"tutorial2_title": {
+		"message":"Step 2 - Generate or Import Key Pair"
+	},
+	"tutorial2_body": {
+		"message":"You can either generate a new key pair as shown here or <b>import your OpenPGP keys</b> by pasting and saving them. PGP Anywhere automatically detects your key. Save your key password for private keys as well, otherwise decryption won't be possible."
+	},
+	"tutorial3_title": {
+		"message":"Step 3 - Use PGP Anywhere everywhere"
+	},
+	"tutorial3_body": {
+		"message":"Just click on the small icon next to your address bar to open up the menu. Use the small arrow to expand the field in case the text is longer. Select the correct key, either to encrypt or to decrypt, enter your message and submit it using the according button.  You can switch between keys as much as you want.<br><br>Congratulations, you are now ready to save the world and use PGP both convenient and safe."
+	},
+	"tutorial_outro_button": {
+		"message":"Know a friend that can use a tool like this?<br>Rate & share now!"
+	},
+	"tutorial_credits_title": {
+		"message":"Credits and Attribution"
+	},
+	"tutorial_credits_image": {
+		"message":"Licensed Image"
+	},
+	"enter_msg": {
+		"message":"Enter your message..."
+	}
+}

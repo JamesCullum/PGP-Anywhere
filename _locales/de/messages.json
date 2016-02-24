@@ -1,0 +1,179 @@
+{
+	"manifest_description": {
+		"message":"PGP für die Hosentasche"
+	},
+	"generating": {
+		"message":"Wird generiert..."
+	},
+	"delete_confirm": {
+		"message":"Bist du dir sicher dass du alle Daten entfernen willst?"
+	},
+	"password_no_match": {
+		"message":"Master Passwörter weichen voneinander ab!"
+	},
+	"invalid_key": {
+		"message":"Das scheint kein OpenPGP Schlüssel zu sein!"
+	},
+	"add_key": {
+		"message":"Schlüssel hinzufügen"
+	},
+	"require_identity": {
+		"message":"Bitte gib einen Namen oder eine EMail - Adresse ein!"
+	},
+	"private_key_label": {
+		"message":"Geheimer Schlüssel zur Entschlüsslung"
+	},
+	"public_key_label": {
+		"message":"Öffentliche Schlüssel zur Verschlüsslung"
+	},
+	"option": {
+		"message":"Optionen"
+	},
+	"tutorial": {
+		"message":"Tutorial"
+	},
+	"contact": {
+		"message":"Kontakt"
+	},
+	"more": {
+		"message":"Mehr"
+	},
+	"support_prompt": {
+		"message":"Bitte unterstütze diese Erweiterung durch eine Bewertung und indem du sie deinen Bekannten empfiehlst!"
+	},
+	"support_button": {
+		"message":"Jetzt bewerten"
+	},
+	"settings": {
+		"message":"Einstellungen"
+	},
+	"master_password": {
+		"message":"Master Passwort"
+	},
+	"password_prompt": {
+		"message":"Master Passwort eingeben..."
+	},
+	"password_confirmation": {
+		"message":"Master Passwort eingeben..."
+	},
+	"password_info": {
+		"message":"Mithilfe deines zentralen Passwortes werden deine lokalen Daten verschlüsselt. Nur verschlüsselte Daten werden zu anderen Geräten synchronisiert."
+	},
+	"manage_keys": {
+		"message":"Schlüssel verwalten"
+	},
+	"remove": {
+		"message":"Entfernen"
+	},
+	"function_info": {
+		"message":"PGP Anywhere verwaltet alle deine PGP Schlüssel. Kopiere öffentliche Schlüssel hierhin um Nachrichten damit zu verschlüsseln oder deine geheimen Schlüssel um Nachrichten an dich zu entschlüsseln."
+	},
+	"paste_key": {
+		"message":"Füge einen Schlüssel ein..."
+	},
+	"key_owner_prompt": {
+		"message":"Name oder EMail - Adresse des Besitzers"
+	},
+	"generate_key": {
+		"message":"Schlüssel generieren"
+	},
+	"private_pass": {
+		"message":"Passwort für geheimen Schlüssel"
+	},
+	"save": {
+		"message":"Speichern"
+	},
+	"save_changes": {
+		"message":"Änderungen übernehmen"
+	},
+	"delete_data": {
+		"message":"Alle Daten entfernen"
+	},
+	"key": {
+		"message":"Schlüssel"
+	},
+	"no_key_selected": {
+		"message":"Kein Schlüssel ausgewählt"
+	},
+	"message": {
+		"message":"Nachricht"
+	},
+	"processing": {
+		"message":"Verarbeiten..."
+	},
+	"internal_key_error": {
+		"message":"Interner Fehler, bitte konfiguriere deine Daten erneut"
+	},
+	"key_pass_error": {
+		"message":"Passwort von Schluessel ungueltig"
+	},
+	"encrypt": {
+		"message":"Verschlüsseln"
+	},
+	"decrypt": {
+		"message":"Entschlüsseln"
+	},
+	"verdict_weak": {
+		"message":"Schwach"
+	},
+	"verdict_normal": {
+		"message":"Normal"
+	},
+	"verdict_medium": {
+		"message":"Akzeptabel"
+	},
+	"verdict_strong": {
+		"message":"Stark"
+	},
+	"verdict_very_strong": {
+		"message":"Sehr stark"
+	},
+	"unlock": {
+		"message":"Tresor"
+	},
+	"unlock_title": {
+		"message":"Entschlüssle deine Zugangsdaten"
+	},
+	"pass_required": {
+		"message":"Password benötigt"
+	},
+	"unlock_prompt": {
+		"message":"Deine Zugangsdaten sind lediglich verschlüsselt gespeichert. Wenn du dein Passwort vergessen hast kannst du alle Daten entfernen und erneut hinzufügen."
+	},
+	"tutorial_welcome": {
+		"message":"Willkommen bei PGP Anywhere"
+	},
+	"tutorial_intro": {
+		"message":"PGP Anywhere speichert und verwaltet deine öffentlichen und geheimen Schlüssel. Durch eine verschlüsselte Synchronisation zu anderen Geräten mit Chrome kannst du von überall darauf zugreifen. Du musst ab jetzt nichtmals die Seite verlassen und kannst mit einem Klick auf das Symbol loslegen. PGP Anywhere verwendet <a href=\"http://openpgpjs.org/\" target=\"_new\">OpenPGP</a> für Nachrichten, <a href=\"http://bitwiseshiftleft.github.io/sjcl/\" target=\"_new\">SJCL</a> zur Verschlüsslung und <a href=\"https://en.wikipedia.org/wiki/Bcrypt\" target=\"_new\">bCrypt</a> als Hash - Algorithmus."
+	},
+	"tutorial1_title": {
+		"message":"Schritt 1 - Master Passwort setzen"
+	},
+	"tutorial1_body": {
+		"message":"<b>Öffne die <a href=\"options.html\" target=\"_newtab\">Einstellungen</a> um diese Einstellungen vorzunehmen.</b> Als erstes solltest du ein starkes Master Passwort setzen wodurch die automatische Verschlüsslung und Synchronisation aktiviert wird. Ab diesem Zeitpunkt werden alle Daten lediglich verschlüsselt gespeichert. Mithilfe des Passwort-O-Meter kannst du einfach sehen wie stark dein Passwort ist. Verwende ein automatisch generiertes Passwort von einem Passwortmanager mit Zweifaktor - Authentifizierung um die Sicherheit zu erhöhen."
+	},
+	"tutorial2_title": {
+		"message":"Schritt 2 - Schlüssel erzeugen oder importieren"
+	},
+	"tutorial2_body": {
+		"message":"Du kannst entweder ein neues Schlüsselpaar erzeugen oder bereits erstellte <b>OpenPGP - Schlüssel</b> importieren indem du diese einfügst und speicherst. PGP Anywhere erkennt automatisch ob es sich um einen geheimen oder öffentlichen Schlüssel handelt. Speichere dein Passwort für geheime Schlüssel ebenfalls, sonst ist die Entschlüsslung nicht möglich."
+	},
+	"tutorial3_title": {
+		"message":"Schritt 3 - PGP Anywhere überall verwenden"
+	},
+	"tutorial3_body": {
+		"message":"Klicke einfach auf das kleine Symbol neben der Adressleiste um das Menü zu öffnen. Mithilfe des kleinen Pfeil kannst du das Fenster vergrößern. Wähle den gewünschten Schlüssel aus, jenachdem ob du eine Nachricht ver- oder entschlüsseln möchtest, gib die Nachricht ein und klicke den Button der entsprechend beschriftet ist. <br><br>Glückwunsch, du bist jetzt bereit die Welt zu retten und PGP sowohl einfach als auch sicher zu verwenden."
+	},
+	"tutorial_outro_button": {
+		"message":"Du kennst jemanden der auch Interesse hieran haben könnte?<br>Jetzt bewerten & teilen!"
+	},
+	"tutorial_credits_title": {
+		"message":"Credits und Namensnennung"
+	},
+	"tutorial_credits_image": {
+		"message":"Lizensierte Grafik"
+	},
+	"enter_msg": {
+		"message":"Gib deine Nachricht ein..."
+	}
+}

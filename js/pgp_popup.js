@@ -48,7 +48,7 @@ $(document).ready(function() {
 		$("#decpgptxt").closest(".form-group").removeClass("has-error");
 		
 		var befText = $(this).html();
-		$(this).html('Processing... <i class="fa fa-cog fa-spin"></i>').addClass("disabled");
+		$(this).html(chrome.i18n.getMessage("processing")+' <i class="fa fa-cog fa-spin"></i>').addClass("disabled");
 		
 		if(infosplit[1] == "0")
 		{
@@ -64,17 +64,17 @@ $(document).ready(function() {
 					break;
 				}
 			}
-			if( !key.length ) return alert("internal key error, please re-add private key");
+			if( !key.length ) return alert(chrome.i18n.getMessage("internal_key_error"));
 			var privateKey = openpgp.key.readArmored(key).keys[0];
 			var retdec = privateKey.decrypt(keypass);
-			if(retdec === false) return alert("Key Password invalid");
+			if(retdec === false) return alert(chrome.i18n.getMessage("key_pass_error"));
 			pgpMessage = openpgp.message.readArmored(toenc);
 			openpgp.decryptMessage(privateKey, pgpMessage).then(function(plaintext) {
 				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(plaintext);
 			}).catch(function(error) {
 				$("#submitbutton").html(befText).removeClass("disabled");
-				alert("Decryption Error: "+error);
+				alert("Error: "+error);
 			});
 		}
 		else
@@ -82,7 +82,7 @@ $(document).ready(function() {
 			var container = openkeyring("public");
 			var key = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) key=container[i].key;
-			if( !key.length ) return alert("internal key error, please re-add public key for "+infosplit[0]);
+			if( !key.length ) return alert(chrome.i18n.getMessage("internal_key_error")+" - "+infosplit[0]);
 			var publicKey = openpgp.key.readArmored(key).keys[0];
 			openpgp.encryptMessage(publicKey, toenc).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
@@ -121,8 +121,8 @@ function onkeysel()
 	else 
 	{
 		$("#submitbutton").removeAttr("disabled");
-		if( $("#selectDecKey").val().indexOf("|0") == -1) $("#submitbutton").text("Encrypt");
-		else $("#submitbutton").text("Decrypt");
+		if( $("#selectDecKey").val().indexOf("|0") == -1) $("#submitbutton").text(chrome.i18n.getMessage("encrypt"));
+		else $("#submitbutton").text(chrome.i18n.getMessage("decrypt"));
 	}
 }
 
@@ -131,14 +131,14 @@ function loadkeyrings()
 	var container = openkeyring("private");
 	if(container.length)
 	{
-		$("#selectDecKey").append('<optgroup label="Private Keys for Decryption" id="privateKeyGroup"></div>');
+		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("private_key_label")+'" id="privateKeyGroup"></div>');
 		for(var i=0;i<container.length;i++) $("#privateKeyGroup").append('<option value="'+container[i].email+'|0">'+container[i].email+'</option>');
 	}
 	
 	var container = openkeyring("public");
 	if(container.length)
 	{
-		$("#selectDecKey").append('<optgroup label="Public Keys for Encryption" id="publicKeyGroup"></div>');
+		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("public_key_label")+'" id="publicKeyGroup"></div>');
 		for(var i=0;i<container.length;i++) $("#publicKeyGroup").append('<option value="'+container[i].email+'|1">'+container[i].email+'</option>');
 	}
 	

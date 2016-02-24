@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Tutorial | PGPAnywhere</title>
+		<title>__MSG_tutorial__ | PGPAnywhere</title>
 		
-		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
-		<link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
-		<link rel="stylesheet" href="css/skin.css" media="screen">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/skin.css">
 		
 		<script src="../js/jquery-1.8.3.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
@@ -16,6 +16,7 @@
 		<script src="../js/bCrypt.min.js"></script>
 		<script src="../js/pwstrength-bootstrap-1.2.5.min.js"></script>
 		<script src="../js/options.js"></script>
+		<script src="../js/translate.js"></script>
 	</head>
 	<body>
 		<nav class="navbar navbar-default">
@@ -31,12 +32,12 @@
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			  <ul class="nav navbar-nav">
-				<li><a href="options.html">Options</a></li>
-				<li class="active"><a href="tutorial.html">Tutorial</a></li>
+				<li><a href="options.html" class="l18n">__MSG_option__</a></li>
+				<li class="active"><a href="tutorial.html" class="l18n">__MSG_tutorial__</a></li>
 			  </ul>
 			  <ul class="nav navbar-nav navbar-right">
-				<li><a href="mailto:nicolas.giese@web.de">Contact</a></li>
-				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese">More</a></li>
+				<li><a href="mailto:nicolas.giese@web.de" class="l18n">__MSG_contact__</a></li>
+				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese" class="l18n">__MSG_more__</a></li>
 			  </ul>
 			</div>
 		  </div>
@@ -44,13 +45,8 @@
 		<div class="bs-component center-container">
 			<div class="row">
 				<div class="col-lg-6">
-					<h2>Welcome to PGP Anywhere</h2>
-					<p>
-						PGP Anywhere saves and uses all your public and private keys and enables you to take them with you by synchronizing them to other Chrome instances.
-						Manage your keys in it and encrypt or decrypt messages without leaving the page you currently are on. 
-						PGP Anywhere uses <a href="http://openpgpjs.org/" target="_new">OpenPGP</a> for messages.
-						Your key storage is encrypted by <a href="http://bitwiseshiftleft.github.io/sjcl/" target="_new">SJCL</a> and hashed using <a href="https://en.wikipedia.org/wiki/Bcrypt" target="_new">bCrypt</a>.
-					</p>
+					<h2 class="l18n">__MSG_tutorial_welcome__</h2>
+					<p class="l18n">__MSG_tutorial_intro__</p>
 				</div>
 				<div class="col-lg-6" style="vertical-align:middle;">
 					<div class="pull-right" style="text-align:center;">
@@ -66,22 +62,14 @@
 					</div>
 				</div>
 				<div class="col-lg-6" style="text-align:right;">
-					<h2 style="margin-top:0;">Step 1 - Set master password</h2>
-					<p>
-						<b>Open up the <a href="options.html" target="_newtab">options</a> now to start the setup.</b> 
-						You first step should be to set a strong master password that will enable device synchronization and makes sure no one but you can access your key storage.
-						All your data will always be stored encrypted from that point on. Use the password-o-meter to see how good your password is.
-						Use a generated password from a password manager with multi-factor authentification for added security.
-					</p>
+					<h2 style="margin-top:0;" class="l18n">__MSG_tutorial1_title__</h2>
+					<p class="l18n">__MSG_tutorial1_body__</p>
 				</div>
 			</div>
 			<div class="row" style="margin-top:75px;">
 				<div class="col-lg-6">
-					<h2 style="margin-top:0;">Step 2 - Generate or Import Key Pair</h2>
-					<p>
-						You can either generate a new key pair as shown here or <b>import your OpenPGP keys</b> by pasting and saving them.
-						PGP Anywhere automatically detects your key. Save your key password for private keys as well, otherwise decryption won't be possible.
-					</p>
+					<h2 style="margin-top:0;" class="l18n">__MSG_tutorial2_title__</h2>
+					<p class="l18n">__MSG_tutorial2_body__</p>
 				</div>
 				<div class="col-lg-6" style="vertical-align:middle;">
 					<div class="pull-right" style="text-align:center;">
@@ -96,23 +84,21 @@
 					</div>
 				</div>
 				<div class="col-lg-6" style="text-align:right;">
-					<h2 style="margin-top:0;">Step 3 - Use PGP Anywhere everywhere</h2>
+					<h2 style="margin-top:0;" class="l18n">__MSG_tutorial3_title__</h2>
 					<p>
-						Just click on the small icon next to your address bar to open up the menu. Use the small arrow to expand the field in case the text is longer.
-						Select the correct key, either to encrypt or to decrypt, enter your message and submit it using the according button. 
-						You can switch between keys as much as you want.<br><br>
-						Congratulations, you are now ready to save the world and use PGP both convenient and safe.<br><br>
-						<a class="btn btn-primary btn-sm pull-right" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate" style="text-align:right;">
-							Know a friend that can use a tool like this?<br>Rate & share now!
+						<span class="l18n">__MSG_tutorial3_body__</span>
+						<br><br>
+						<a class="btn btn-primary btn-sm pull-right l18n" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate" style="text-align:right;">
+							__MSG_tutorial_outro_button__
 						</a>
 					</p>
 				</div>
 			</div>
 			<div class="row" style="margin-top:50px;">
 				<div class="col-lg-12">
-					<h4>Credits and Attribution</h4>
+					<h4 class="l18n">__MSG_tutorial_credits_title__</h4>
 					<p>
-						<a href="https://www.iconfinder.com/PixelBuddha">Pixel Buddha</a> & <a href="https://www.iconfinder.com/Vecteezy">Vecteezy</a> &raquo; Licensed Image
+						<a href="https://www.iconfinder.com/PixelBuddha">Pixel Buddha</a> & <a href="https://www.iconfinder.com/Vecteezy">Vecteezy</a> &raquo; <span class="l18n">__MSG_tutorial_credits_image__</span>
 					</p>
 				</div>
 			</div>

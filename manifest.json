@@ -2,8 +2,9 @@
 	"manifest_version": 2,
 
 	"name": "PGP Anywhere",
-	"description": "Encrypt and decrypt PGP on the go",
-	"version": "3.1.0",
+	"description": "__MSG_manifest_description__",
+	"default_locale":"en",
+	"version": "3.3.0",
 	"icons": {
 		"16": "img/favicon_16.png",
 		"48": "img/favicon_48.png",

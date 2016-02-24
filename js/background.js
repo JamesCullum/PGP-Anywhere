@@ -1,20 +1,7 @@
 var decpw = false, syncloadcount = 0;
 
 init();
-
-function init()
-{
-	if(loadval("pgpanywhere_encrypted",0)==1) 
-	{
-		chrome.browserAction.setPopup({popup:"html/unlock.html"});
-		chrome.browserAction.setIcon({path:"img/favicon_lock.png"});
-	}
-	else 
-	{
-		chrome.browserAction.setPopup({popup:"html/popup.html"});
-		chrome.browserAction.setIcon({path:"img/favicon_19.png"});
-	}
-}
+init_sync(1);
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -34,34 +21,50 @@ chrome.runtime.onMessage.addListener(
 );
 
 chrome.runtime.onInstalled.addListener(function(details){
-    if(details.reason == "install") 
-	{
-        chrome.storage.sync.get("pgpanywhere_sync_set", function (sync_container) {
-			if(jQuery.isEmptyObject(sync_container)) 
-			{
-				window.open("html/tutorial.html");
-				return;
-			}
-
-			syncloadcount = 0;
-			chrome.storage.sync.get("pgpanywhere_sync_container_settings", function (sync_container) {
-				var decdata = jQuery.parseJSON(sync_container.pgpanywhere_sync_container_settings);
-				
-				localStorage.setItem("pgpanywhere_encrypted", decdata.encrypted);
-				localStorage.setItem("pgpanywhere_encrypted_hash",  decdata.hash );
-				onsyncload();
-			});
-			chrome.storage.sync.get("pgpanywhere_sync_container_publickeys", function (sync_container) {
-				localStorage.setItem("pgpanywhere_public_keyring", sync_container.pgpanywhere_sync_container_publickeys );
-				onsyncload();
-			});
-			chrome.storage.sync.get("pgpanywhere_sync_container_privatekeys", function (sync_container) {
-				localStorage.setItem("pgpanywhere_private_keyring", sync_container.pgpanywhere_sync_container_privatekeys );
-				onsyncload();
-			});
-		});
-    }
+    //if(details.reason == "install") init_sync(1);
 });
+
+function init()
+{
+	if(loadval("pgpanywhere_encrypted",0)==1) 
+	{
+		chrome.browserAction.setPopup({popup:"html/unlock.html"});
+		chrome.browserAction.setIcon({path:"img/favicon_lock.png"});
+	}
+	else 
+	{
+		chrome.browserAction.setPopup({popup:"html/popup.html"});
+		chrome.browserAction.setIcon({path:"img/favicon_19.png"});
+	}
+}
+
+function init_sync(tutorial)
+{
+	chrome.storage.sync.get("pgpanywhere_sync_set", function (sync_container) {
+		if(jQuery.isEmptyObject(sync_container)) 
+		{
+			if(tutorial) window.open("html/tutorial.html");
+			return;
+		}
+
+		syncloadcount = 0;
+		chrome.storage.sync.get("pgpanywhere_sync_container_settings", function (sync_container) {
+			var decdata = jQuery.parseJSON(sync_container.pgpanywhere_sync_container_settings);
+				
+			localStorage.setItem("pgpanywhere_encrypted", decdata.encrypted);
+			localStorage.setItem("pgpanywhere_encrypted_hash",  decdata.hash );
+			onsyncload();
+		});
+		chrome.storage.sync.get("pgpanywhere_sync_container_publickeys", function (sync_container) {
+			localStorage.setItem("pgpanywhere_public_keyring", sync_container.pgpanywhere_sync_container_publickeys );
+			onsyncload();
+		});
+		chrome.storage.sync.get("pgpanywhere_sync_container_privatekeys", function (sync_container) {
+			localStorage.setItem("pgpanywhere_private_keyring", sync_container.pgpanywhere_sync_container_privatekeys );
+			onsyncload();
+		});
+	});
+}
 
 function loadval(key,def)
 {

@@ -6,15 +6,18 @@ $(document).ready(function() {
 	sjcl.random = new sjcl.prng(randParanoia);
 	sjcl.random.startCollectors();
 	
-	var options = {};
-    options.rules = {
-        activated: {
-            wordTwoCharacterClasses: true,
-            wordRepetitions: true
-        }
-    };
-	options.ui = {
-        showVerdictsInsideProgressBar: true
+	var options = {
+		rules: {
+			activated: {
+				wordTwoCharacterClasses: true,
+				wordRepetitions: true
+			}
+		},
+		ui: {
+			showVerdictsInsideProgressBar: true,
+			verdicts: [ chrome.i18n.getMessage("verdict_weak"), chrome.i18n.getMessage("verdict_normal"), chrome.i18n.getMessage("verdict_medium"), 
+						chrome.i18n.getMessage("verdict_strong"), chrome.i18n.getMessage("verdict_very_strong") ]
+		}
     };
     $('#inputMasterPassword').pwstrength(options);
 	
@@ -104,7 +107,7 @@ $(document).ready(function() {
 		
 		$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").addClass("disabled").attr("disabled", "disabled");
 		var befText = $(this).html();
-		$(this).html('Generating... <i class="fa fa-cog fa-spin"></i>');
+		$(this).html(chrome.i18n.getMessage("generating") + ' <i class="fa fa-cog fa-spin"></i>');
 		
 		createRandomString(function(createdString) {
 			var createOptions = {
@@ -158,7 +161,7 @@ $(document).ready(function() {
 	
 	$("#flushbutton").click(function(e) {
 		e.preventDefault();
-		if(confirm("Are you sure that you want to remove all data? This includes your login informations and pgp keys!"))
+		if(confirm(chrome.i18n.getMessage("delete_confirm")))
 		{
 			chrome.storage.sync.clear();
 			localStorage.clear(); 
@@ -169,7 +172,7 @@ $(document).ready(function() {
 		e.preventDefault();
 		
 		var encpw = $("#inputMasterPassword").val();
-		if( encpw != $("#inputMasterPassword2").val() ) return alert("Master Passwords don't match!");
+		if( encpw != $("#inputMasterPassword2").val() ) return alert(chrome.i18n.getMessage("password_no_match"));
 		var encrypted = encpw.length ? 1 : 0;
 		var temp_public = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_public_keyring","[]")) : loadval("pgpanywhere_public_keyring","[]");
 		var temp_private = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_private_keyring","[]")) : loadval("pgpanywhere_private_keyring","[]");
@@ -194,7 +197,6 @@ $(document).ready(function() {
 				var settingscontainer = {"encrypted":encrypted, "hash":encrypted_hash};
 				localStorage.setItem("pgpanywhere_encrypted_hash", encrypted_hash );
 				chrome.storage.sync.set({"pgpanywhere_sync_container_settings": JSON.stringify(settingscontainer)}, function() { onsyncset(); });
-				chrome.storage.sync.set({"pgpanywhere_sync_set": d.getDate()+"."+(d.getMonth()+1)+"."+d.getFullYear()}, function() { onsyncset(); });
 				chrome.storage.sync.set({"pgpanywhere_sync_container_publickeys": temp_public}, function() { onsyncset(); });
 				chrome.storage.sync.set({"pgpanywhere_sync_container_privatekeys": temp_private}, function() { onsyncset(); });
 			});
@@ -221,10 +223,10 @@ function savekey(email, key, pass)
 		container.push(addobj);
 		savekeyring("public",container);
 	}
-	else alert("This is not a valid PGP Key");
+	else alert(chrome.i18n.getMessage("invalid_key"));
 	
 	$("#selectDecKey").html('');
-	$("#selectDecKey").append('<option value="addnew">Add new key</option>');
+	$("#selectDecKey").append('<option value="addnew">'+chrome.i18n.getMessage("add_key")+'</option>');
 	loadkeyrings();
 	$("#selectDecKey").change();
 }
@@ -236,7 +238,7 @@ function getAlias()
 	{
 		var bef = $("#inputEmail").css("border");
 		$("#inputEmail").css("border","1px solid red");
-		alert("Please fill in a name or email address");
+		alert(chrome.i18n.getMessage("require_identity"));
 		$("#inputEmail").css("border",bef);
 		return false;
 	}
@@ -248,14 +250,14 @@ function loadkeyrings()
 	var container = openkeyring("private");
 	if(container.length)
 	{
-		$("#selectDecKey").append('<optgroup label="Private Keys for Decryption" id="privateKeyGroup"></div>');
+		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("private_key_label")+'" id="privateKeyGroup"></div>');
 		for(var i=0;i<container.length;i++) $("#privateKeyGroup").append('<option value="'+container[i].email+'|0">'+container[i].email+'</option>');
 	}
 	
 	var container = openkeyring("public");
 	if(container.length)
 	{
-		$("#selectDecKey").append('<optgroup label="Public Keys for Encryption" id="publicKeyGroup"></div>');
+		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("public_key_label")+'" id="publicKeyGroup"></div>');
 		for(var i=0;i<container.length;i++) $("#publicKeyGroup").append('<option value="'+container[i].email+'|1">'+container[i].email+'</option>');
 	}
 }

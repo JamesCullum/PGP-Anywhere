@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Options | PGPAnywhere</title>
+		<title>__MSG_option__ | PGP Anywhere</title>
 		
-		<link rel="stylesheet" href="css/bootstrap.min.css" media="screen">
-		<link rel="stylesheet" href="css/font-awesome.min.css" media="screen">
-		<link rel="stylesheet" href="css/skin.css" media="screen">
+		<link rel="stylesheet" href="css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/font-awesome.min.css">
+		<link rel="stylesheet" href="css/skin.css">
 		
 		<script src="../js/jquery-1.8.3.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
@@ -16,6 +16,7 @@
 		<script src="../js/bCrypt.min.js"></script>
 		<script src="../js/pwstrength-bootstrap-1.2.5.min.js"></script>
 		<script src="../js/options.js"></script>
+		<script src="../js/translate.js"></script>
 	</head>
 	<body>
 		<nav class="navbar navbar-default">
@@ -31,60 +32,60 @@
 			</div>
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			  <ul class="nav navbar-nav">
-				<li class="active"><a href="options.html">Options</a></li>
-				<li><a href="tutorial.html">Tutorial</a></li>
+				<li class="active"><a href="options.html" class="l18n">__MSG_option__</a></li>
+				<li><a href="tutorial.html" class="l18n">__MSG_tutorial__</a></li>
 			  </ul>
 			  <ul class="nav navbar-nav navbar-right">
-				<li><a href="mailto:nicolas.giese@web.de">Contact</a></li>
-				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese">More</a></li>
+				<li><a href="mailto:nicolas.giese@web.de" class="l18n">__MSG_contact__</a></li>
+				<li><a href="https://chrome.google.com/webstore/search/nicolas%20giese" class="l18n">__MSG_more__</a></li>
 			  </ul>
 			</div>
 		  </div>
 		</nav>
 		<div class="alert alert-dismissible alert-warning visible-lg info-alert center-container" style="margin-top:40px;">
 			<p>
-				Please support the development of this extension by rating & sharing!
-				<a class="btn btn-primary btn-sm pull-right" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate">Rate Now</a>
+				<span class="l18n">__MSG_support_prompt__</span>
+				<a class="btn btn-primary btn-sm pull-right l18n" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate">__MSG_support_button__</a>
 			</p>
 		</div>
 		<div style="margin-top:10px;" class="well bs-component center-container">
 			<form class="form-horizontal">
 			  <fieldset>
-				<legend>Settings</legend>
+				<legend class="l18n">__MSG_settings__</legend>
 				<div class="form-group masterGroup">
-					<label for="inputPassword" class="col-lg-2 control-label">
-						Master Password
+					<label for="inputPassword" class="col-lg-2 control-label l18n">
+						__MSG_master_password__
 					</label>
 					<div class="col-lg-10">
-						<input type="password" class="form-control" id="inputMasterPassword" placeholder="Enter master password...">
-						<input type="password" class="form-control" id="inputMasterPassword2" placeholder="Repeat master password" style="display:none;">
-						<span class="help-block">Setting a master password will encrypt the local key database. Only encrypted databases will be synced to new clients.</span>
+						<input type="password" class="form-control l18n" id="inputMasterPassword" placeholder="__MSG_password_prompt__">
+						<input type="password" class="form-control l18n" id="inputMasterPassword2" placeholder="__MSG_password_confirmation__" style="display:none;">
+						<span class="help-block l18n">__MSG_password_info__</span>
 					</div>
 				</div>
 				<div class="form-group keyGroup">
-					<label for="selectDecKey" class="col-lg-2 control-label">Manage your Keys</label>
+					<label for="selectDecKey" class="col-lg-2 control-label l18n">__MSG_manage_keys__</label>
 					<div class="col-lg-10">
 						<div class="input-group">
-							<select class="form-control" id="selectDecKey"><option value="addnew">Add new key</option></select>
+							<select class="form-control" id="selectDecKey"><option value="addnew" class="l18n">__MSG_add_key__</option></select>
 							<span class="input-group-btn">
-								<button type="submit" class="btn btn-default" id="removebutton" disabled>Remove</button>
+								<button type="submit" class="btn btn-default l18n" id="removebutton" disabled>__MSG_remove__</button>
 							</span>
 						</div>
-						<span class="help-block">PGPAnywhere manages all of your keys. Paste public keys of other people to encrypt data or paste your private key to decrypt data sent to you.</span>
+						<span class="help-block l18n">__MSG_function_info__</span>
 						<div id="addkeyform">
-							<textarea class="form-control" rows="5" id="addpgpdeckey" placeholder="Paste private or public key..."></textarea>
+							<textarea class="form-control l18n" rows="5" id="addpgpdeckey" placeholder="__MSG_paste_key__"></textarea>
 							<div class="spacer"></div>
 							<div class="input-group">
-								<input type="text" class="form-control" id="inputEmail" placeholder="Name or email address of key owner">
+								<input type="text" class="form-control l18n" id="inputEmail" placeholder="__MSG_key_owner_prompt__">
 								<span class="input-group-btn">
-									<button type="submit" class="btn btn-info disabled" id="generatekey">Generate Keys</button>
+									<button type="submit" class="btn btn-info disabled l18n" id="generatekey">__MSG_generate_key__</button>
 								</span>
 							</div>
 							<div class="spacer"></div>
 							<div class="input-group">
-								<input type="password" class="form-control" id="savekeypassword" placeholder="Password for private key" disabled>
+								<input type="password" class="form-control l18n" id="savekeypassword" placeholder="__MSG_private_pass__" disabled>
 								<span class="input-group-btn">
-									<button type="submit" class="btn btn-primary disabled"  id="addbutton">Save</button>
+									<button type="submit" class="btn btn-primary disabled l18n" id="addbutton">__MSG_save__</button>
 								</span>
 							</div>
 						</div>
@@ -92,8 +93,8 @@
 				</div>
 				<div class="form-group">
 				  <div class="col-lg-10 col-lg-offset-2">
-					<button type="submit" class="btn btn-primary" id="submitbutton">Save Changes</button>
-					<button type="reset" class="btn btn-default" id="flushbutton">Delete all data</button>
+					<button type="submit" class="btn btn-primary l18n" id="submitbutton">__MSG_save_changes__</button>
+					<button type="reset" class="btn btn-default l18n" id="flushbutton">__MSG_delete_data__</button>
 				  </div>
 				</div>
 			  </fieldset>
