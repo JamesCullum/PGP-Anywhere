@@ -53,21 +53,25 @@ $(document).ready(function() {
 		if(infosplit[1] == "0")
 		{
 			var container = openkeyring("private");
-			var key = "";
+			var goKey = "";
 			var keypass = "";
 			for(var i=0;i<container.length;i++) 
 			{
 				if(container[i].email==infosplit[0]) 
 				{
-					key=container[i].key;
+					goKey=container[i].key;
 					keypass=container[i].password;
 					break;
 				}
 			}
-			if( !key.length ) return alert(chrome.i18n.getMessage("internal_key_error"));
-			var privateKey = openpgp.key.readArmored(key).keys[0];
+			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error"));
+			var privateKey = openpgp.key.readArmored(goKey).keys[0];
 			var retdec = privateKey.decrypt(keypass);
-			if(retdec === false) return alert(chrome.i18n.getMessage("key_pass_error"));
+			if(retdec === false) 
+			{
+				$("#submitbutton").html(befText).removeClass("disabled");
+				return alert(chrome.i18n.getMessage("key_pass_error"));
+			}
 			pgpMessage = openpgp.message.readArmored(toenc);
 			openpgp.decryptMessage(privateKey, pgpMessage).then(function(plaintext) {
 				$("#submitbutton").html(befText).removeClass("disabled");
@@ -80,10 +84,15 @@ $(document).ready(function() {
 		else
 		{
 			var container = openkeyring("public");
-			var key = "";
-			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) key=container[i].key;
-			if( !key.length ) return alert(chrome.i18n.getMessage("internal_key_error")+" - "+infosplit[0]);
-			var publicKey = openpgp.key.readArmored(key).keys[0];
+			var goKey = "";
+			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
+			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error")+": "+infosplit[0]);
+			var publicKey = openpgp.key.readArmored(goKey).keys[0];
+			if( typeof publicKey == 'undefined' ) 
+			{
+				$("#submitbutton").html(befText).removeClass("disabled");
+				return alert(chrome.i18n.getMessage("key_incompatible"));
+			}
 			openpgp.encryptMessage(publicKey, toenc).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(pgpMessage);

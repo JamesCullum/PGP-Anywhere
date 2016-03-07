@@ -1,4 +1,4 @@
-var masterpw = "", syncloadcount = 0, syncsetcount = 0;
+var masterpw = "", syncloadcount = 0, syncsetcount = 0, synccounter = 0;
 var bcrypt = new bCrypt();
 
 $(document).ready(function() {
@@ -111,7 +111,7 @@ $(document).ready(function() {
 		
 		createRandomString(function(createdString) {
 			var createOptions = {
-				numBits: 4096,
+				numBits: 2048,
 				userId: user,
 				passphrase: createdString
 			};
@@ -176,14 +176,14 @@ $(document).ready(function() {
 		var encrypted = encpw.length ? 1 : 0;
 		var temp_public = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_public_keyring","[]")) : loadval("pgpanywhere_public_keyring","[]");
 		var temp_private = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_private_keyring","[]")) : loadval("pgpanywhere_private_keyring","[]");
-		temp_public = encpw.length ? sjcl.encrypt(encpw, temp_public) : temp_public;
-		temp_private = encpw.length ? sjcl.encrypt(encpw, temp_private) : temp_private;
+		temp_public_save = encpw.length ? sjcl.encrypt(encpw, temp_public) : temp_public;
+		temp_private_save = encpw.length ? sjcl.encrypt(encpw, temp_private) : temp_private;
 		
 		$("#submitbutton").attr("disabled","disabled");
 		masterpw = encpw;
 		localStorage.setItem("pgpanywhere_encrypted", encrypted);
-		localStorage.setItem("pgpanywhere_public_keyring", temp_public);
-		localStorage.setItem("pgpanywhere_private_keyring", temp_private);
+		localStorage.setItem("pgpanywhere_public_keyring", temp_public_save);
+		localStorage.setItem("pgpanywhere_private_keyring", temp_private_save);
 		chrome.runtime.sendMessage({ msg: "unlock", "auth": masterpw });
 		
 		if(encrypted)
@@ -191,14 +191,47 @@ $(document).ready(function() {
 			var d = new Date(); 
 			syncsetcount = 0;
 			
-			//Hash-Generierung
-			var hashtype = 2; //immer bCrypt
+			// Hash-Generation
+			var hashtype = 2; //always bCrypt
 			createhash( encpw, hashtype, function(encrypted_hash) {
 				var settingscontainer = {"encrypted":encrypted, "hash":encrypted_hash};
 				localStorage.setItem("pgpanywhere_encrypted_hash", encrypted_hash );
+				
+				addSyncElement(6);
 				chrome.storage.sync.set({"pgpanywhere_sync_container_settings": JSON.stringify(settingscontainer)}, function() { onsyncset(); });
-				chrome.storage.sync.set({"pgpanywhere_sync_container_publickeys": temp_public}, function() { onsyncset(); });
-				chrome.storage.sync.set({"pgpanywhere_sync_container_privatekeys": temp_private}, function() { onsyncset(); });
+				
+				// Public Keys
+				var container = openkeyring("public");
+				addSyncElement(container.length);
+				for(var i=0;i<container.length;i++)
+				{
+					var enc_item = sjcl.encrypt(encpw, JSON.stringify(container[i]));
+					var sync_label = "pgpanywhere_sync_public_"+i;
+					var sync_item = {};
+					sync_item[sync_label] = enc_item;
+					chrome.storage.sync.set(sync_item, function() { onsyncset(); });
+				}
+				chrome.storage.sync.set({"pgpanywhere_sync_public_list": container.length}, function() { onsyncset(); });
+				
+				// Private Keys
+				var container = openkeyring("private");
+				addSyncElement(container.length);
+				for(var i=0;i<container.length;i++)
+				{
+					var enc_item = sjcl.encrypt(encpw, JSON.stringify(container[i]));
+					var sync_label = "pgpanywhere_sync_private_"+i;
+					var sync_item = {};
+					sync_item[sync_label] = enc_item;
+					chrome.storage.sync.set(sync_item, function() { onsyncset(); });
+				}
+				chrome.storage.sync.set({"pgpanywhere_sync_private_list": container.length}, function() { onsyncset(); });
+				
+				// Empty container from older versions
+				chrome.storage.sync.remove("pgpanywhere_sync_container_publickeys", function() { onsyncset(); });
+				chrome.storage.sync.remove("pgpanywhere_sync_container_privatekeys", function() { onsyncset(); });
+				
+				var timestamp = Math.floor(Date.now() / 1000);
+				chrome.storage.sync.set({"pgpanywhere_sync_set": timestamp}, function() { onsyncset(); });
 			});
 		}
 		else window.close();
@@ -285,10 +318,15 @@ function loadval(key,def)
 	return retval;
 }
 
+function addSyncElement(add)
+{
+	synccounter+=add;
+}
+
 function onsyncset()
 {
 	syncsetcount++;
-	if(syncsetcount>=4) window.close();
+	if(syncsetcount>=synccounter) alert("dev: sync done");//window.close();
 }
 
 function createhash(str, algo, func)

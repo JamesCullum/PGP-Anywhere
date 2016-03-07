@@ -104,6 +104,9 @@
 	"internal_key_error": {
 		"message":"Internal key error, please re-add private key"
 	},
+	"key_incompatible": {
+		"message":"This key is sadly not compatible to OpenPGP"
+	},
 	"key_pass_error": {
 		"message":"Key Password invalid"
 	},

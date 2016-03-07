@@ -20,6 +20,39 @@ $(document).ready(function() {
 		checkhash(decpw,loadval("pgpanywhere_encrypted_hash",false), function(result) {
 			if(result)
 			{
+				// Check public queue
+				var queue = loadval("pgpanywhere_sync_public_queue", "");
+				if(queue.length)
+				{
+					queue = jQuery.parseJSON(queue);
+					console.log(queue);
+					var container = [];
+					
+					for(var i=0;i<queue.length;i++)
+					{
+						container[i] = jQuery.parseJSON(sjcl.decrypt(decpw, queue[i]));
+					}
+					var temp_public_save = JSON.stringify(container);
+					localStorage.setItem("pgpanywhere_public_keyring", sjcl.encrypt(decpw, temp_public_save));
+					localStorage.setItem("pgpanywhere_sync_public_queue", "");
+				}
+				
+				// Check private queue
+				queue = loadval("pgpanywhere_sync_private_queue", "");
+				if(queue.length)
+				{
+					queue = jQuery.parseJSON(queue);
+					var container = [];
+					
+					for(var i=0;i<queue.length;i++)
+					{
+						container[i] = jQuery.parseJSON(sjcl.decrypt(decpw, queue[i]));
+					}
+					var temp_public_save = JSON.stringify(container);
+					localStorage.setItem("pgpanywhere_private_keyring", sjcl.encrypt(decpw, temp_public_save));
+					localStorage.setItem("pgpanywhere_sync_private_queue", "");
+				}
+				
 				chrome.runtime.sendMessage({ msg: "unlock", "auth": decpw });
 				window.location = "popup.html";
 			}

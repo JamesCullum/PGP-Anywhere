@@ -104,6 +104,9 @@
 	"internal_key_error": {
 		"message":"Interner Fehler, bitte konfiguriere deine Daten erneut"
 	},
+	"key_incompatible": {
+		"message":"Dieser Schlüssel ist nicht zu OpenPGP kompatibel"
+	},
 	"key_pass_error": {
 		"message":"Passwort von Schluessel ungueltig"
 	},
