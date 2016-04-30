@@ -66,19 +66,22 @@ $(document).ready(function() {
 			}
 			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error"));
 			var privateKey = openpgp.key.readArmored(goKey).keys[0];
-			var retdec = privateKey.decrypt(keypass);
-			if(retdec === false) 
-			{
-				$("#submitbutton").html(befText).removeClass("disabled");
-				return alert(chrome.i18n.getMessage("key_pass_error"));
-			}
 			pgpMessage = openpgp.message.readArmored(toenc);
-			openpgp.decryptMessage(privateKey, pgpMessage).then(function(plaintext) {
-				$("#submitbutton").html(befText).removeClass("disabled");
-				$("#decpgptxt").val(plaintext);
-			}).catch(function(error) {
-				$("#submitbutton").html(befText).removeClass("disabled");
-				alert("Error: "+error);
+			openpgp.decryptKey({"privateKey": privateKey, passphrase: keypass}).then(function(retdec) {
+				var decOptions = {
+					message:pgpMessage,
+					privateKey:privateKey
+				};
+				openpgp.decrypt(decOptions).then(function(plaintext) {
+					$("#submitbutton").html(befText).removeClass("disabled");
+					$("#decpgptxt").val(plaintext.data);
+				}).catch(function(error) {
+					$("#submitbutton").html(befText).removeClass("disabled");
+					alert(error);
+				});
+			}).catch(function(error){
+				$("#submitbutton").html(befText).removeClass("disabled");				
+				alert(error);
 			});
 		}
 		else
@@ -87,18 +90,22 @@ $(document).ready(function() {
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
 			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error")+": "+infosplit[0]);
-			var publicKey = openpgp.key.readArmored(goKey).keys[0];
+			var publicKey = openpgp.key.readArmored(goKey).keys; //[0]
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#submitbutton").html(befText).removeClass("disabled");
 				return alert(chrome.i18n.getMessage("key_incompatible"));
 			}
-			openpgp.encryptMessage(publicKey, toenc).then(function(pgpMessage) {
+			var encOptions = {
+				data:toenc,
+				publicKeys:publicKey
+			};
+			openpgp.encrypt(encOptions).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
-				$("#decpgptxt").val(pgpMessage);
+				$("#decpgptxt").val(pgpMessage.data);
 			}).catch(function(error) {
 				$("#submitbutton").html(befText).removeClass("disabled");
-				alert("Error: "+error);
+				alert(error);
 			});
 		}
 	});

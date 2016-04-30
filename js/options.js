@@ -112,11 +112,11 @@ $(document).ready(function() {
 		createRandomString(function(createdString) {
 			var createOptions = {
 				numBits: 2048,
-				userId: user,
+				userIds: [{name:user}],
 				passphrase: createdString
 			};
 			
-			openpgp.generateKeyPair(createOptions).then(function(keypair) {
+			openpgp.generateKey(createOptions).then(function(keypair) {
 				var privkey = keypair.privateKeyArmored;
 				var pubkey = keypair.publicKeyArmored;
 				
@@ -127,7 +127,7 @@ $(document).ready(function() {
 				$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
 				$("#selectDecKey").val(user+"|1").change();
 			}).catch(function(error) {
-				alert("Error: "+error);
+				alert(error);
 			});
 		}, 30);
 	});	
@@ -326,7 +326,7 @@ function addSyncElement(add)
 function onsyncset()
 {
 	syncsetcount++;
-	if(syncsetcount>=synccounter) alert("dev: sync done");//window.close();
+	if(syncsetcount>=synccounter) window.close();
 }
 
 function createhash(str, algo, func)
