@@ -11,11 +11,7 @@ $(document).ready(function() {
 	}
 	else loadkeyrings();
 	
-	$("#decpgptxt").keyup(function() {
-		if( $(this).val().length ) $("#submitbutton").removeClass("disabled");
-		else $("#submitbutton").addClass("disabled");
-		$("#decpgptxt").closest(".form-group").removeClass("has-error");
-	});
+	$("#decpgptxt").keyup(onkeysel);
 	$("#addbutton").click(function(e) {
 		e.preventDefault();
 		
@@ -36,15 +32,16 @@ $(document).ready(function() {
 		e.preventDefault();
 		window.open("/html/options.html");
 	});
-	$("#selectDecKey").change(function() { onkeysel(); });
+	$("#selectDecKey").change(onkeysel);
 	$("#submitbutton").click(function(e) {
 		e.preventDefault();
+		showAlert("", 0);
 		
 		var encindex = $("#selectDecKey").val();
 		var infosplit = encindex.split("|");
 		
 		var toenc = $("#decpgptxt").val();
-		if( !toenc.length || ( infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') ) ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
+		if( !toenc.length || ( infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') == -1 ) ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
 		$("#decpgptxt").closest(".form-group").removeClass("has-error");
 		
 		var befText = $(this).html();
@@ -64,24 +61,21 @@ $(document).ready(function() {
 					break;
 				}
 			}
-			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error"));
+			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
 			var privateKey = openpgp.key.readArmored(goKey).keys[0];
 			pgpMessage = openpgp.message.readArmored(toenc);
 			openpgp.decryptKey({"privateKey": privateKey, passphrase: keypass}).then(function(retdec) {
-				var decOptions = {
-					message:pgpMessage,
-					privateKey:privateKey
-				};
-				openpgp.decrypt(decOptions).then(function(plaintext) {
+				openpgp.decrypt({message:pgpMessage,privateKey:privateKey}).then(function(plaintext) {
 					$("#submitbutton").html(befText).removeClass("disabled");
 					$("#decpgptxt").val(plaintext.data);
+					onkeysel();
 				}).catch(function(error) {
 					$("#submitbutton").html(befText).removeClass("disabled");
-					alert(error);
+					showAlert(error, 1);
 				});
 			}).catch(function(error){
 				$("#submitbutton").html(befText).removeClass("disabled");				
-				alert(error);
+				showAlert(error, 1);
 			});
 		}
 		else
@@ -89,56 +83,130 @@ $(document).ready(function() {
 			var container = openkeyring("public");
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
-			if( !goKey.length ) return alert(chrome.i18n.getMessage("internal_key_error")+": "+infosplit[0]);
+			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
 			var publicKey = openpgp.key.readArmored(goKey).keys; //[0]
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#submitbutton").html(befText).removeClass("disabled");
-				return alert(chrome.i18n.getMessage("key_incompatible"));
+				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
 			}
-			var encOptions = {
-				data:toenc,
-				publicKeys:publicKey
-			};
-			openpgp.encrypt(encOptions).then(function(pgpMessage) {
+			openpgp.encrypt({data:toenc,publicKeys:publicKey}).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(pgpMessage.data);
+				onkeysel();
 			}).catch(function(error) {
 				$("#submitbutton").html(befText).removeClass("disabled");
-				alert(error);
+				showAlert(error, 1);
 			});
 		}
 	});
-	$("#expandbutton").click(function() {
-		$(this).blur();
-		sizestate = !sizestate;
-		if(sizestate)
+	$("#altbutton").click(function(e) {
+		e.preventDefault();
+		showAlert("", 0);
+		
+		var encindex = $("#selectDecKey").val();
+		var infosplit = encindex.split("|");
+		
+		var toenc = $("#decpgptxt").val();
+		if( !toenc.length || (infosplit[1] == "1" && toenc.indexOf('-----BEGIN PGP SIGNED MESSAGE-----') == -1)) return $("#decpgptxt").closest(".form-group").addClass("has-error");
+		if(infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') != -1) return showAlert(chrome.i18n.getMessage("sign_then_encrypt"), 1);
+		$("#decpgptxt").closest(".form-group").removeClass("has-error");
+		
+		var befText = $(this).html();
+		$(this).html(chrome.i18n.getMessage("processing")+' <i class="fa fa-cog fa-spin"></i>').addClass("disabled");
+		
+		if(infosplit[1] == "0")
 		{
-			$(this).html('<i class="fa fa-compress"></i>');
-			$("#decpgptxt").animate({"height":"275px"});
-			$("#popupdiv").animate({"width":"600px","height":"450px"});
+			var container = openkeyring("private");
+			var goKey = "";
+			var keypass = "";
+			for(var i=0;i<container.length;i++) 
+			{
+				if(container[i].email==infosplit[0]) 
+				{
+					goKey=container[i].key;
+					keypass=container[i].password;
+					break;
+				}
+			}
+			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
+			var privateKey = openpgp.key.readArmored(goKey).keys[0];
+			openpgp.decryptKey({"privateKey": privateKey, passphrase: keypass}).then(function(retdec) {
+				openpgp.sign({data:toenc,privateKeys:privateKey}).then(function(signed) {
+					$("#altbutton").html(befText).removeClass("disabled");
+					$("#decpgptxt").val(signed.data.trim());
+					onkeysel();
+				}).catch(function(error) {
+					$("#altbutton").html(befText).removeClass("disabled");
+					showAlert(error, 1);
+				});
+			}).catch(function(error) {
+				$("#altbutton").html(befText).removeClass("disabled");				
+				showAlert(error, 1);
+			});
 		}
 		else
 		{
-			$(this).html('<i class="fa fa-arrows-alt"></i>');
-			$("#decpgptxt").animate({"height":"100px"});
-			$("#popupdiv").animate({"width":"300px","height":"270px"});
+			var container = openkeyring("public");
+			var goKey = "";
+			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
+			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
+			var publicKey = openpgp.key.readArmored(goKey).keys; //[0]
+			if( typeof publicKey == 'undefined' ) 
+			{
+				$("#altbutton").html(befText).removeClass("disabled");
+				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
+			}
+			openpgp.verify({message: openpgp.cleartext.readArmored(toenc),publicKeys: publicKey}).then(function(sigCheck) {
+				console.log(sigCheck);
+				$("#altbutton").html(befText).removeClass("disabled");
+				if(sigCheck.data.length && sigCheck.signatures[0].valid && sigCheck.signatures[0].keyid.toHex() == publicKey[0].primaryKey.keyid.toHex())
+				{
+					showAlert(chrome.i18n.getMessage("sig_matches"), 2);
+					$("#decpgptxt").val(sigCheck.data.trim());
+					onkeysel();
+				}
+				else showAlert(chrome.i18n.getMessage("sig_invalid"), 1);
+			});
 		}
 	});
+	$("#expandbutton").click(function(e) {
+		e.preventDefault();
+		window.open("/html/popup.html");
+	});
+	if( $(window).height() > $("#popupdiv").outerHeight()+100 || $(window).width() > $("#popupdiv").outerWidth()+100 ) 
+	{
+		$("nav.navbar").show();
+		$("#popupdiv").addClass("well").css("margin-top","60px");
+		$("#popupdiv > form").addClass("form-horizontal");
+		$("#decpgptxt").css("height","300px");
+	}
 });
 
 function onkeysel()
 {
+	var toenc = $("#decpgptxt").val();
 	$("#decpgptxt").closest(".form-group").removeClass("has-error");
-	if($("#selectDecKey").val()=="addnew")
+	$("#submitbutton, #altbutton").addClass("disabled");
+	
+	if($("#selectDecKey").val()!="addnew")
 	{
-		$("#submitbutton").attr("disabled","disabled");
-	}
-	else 
-	{
-		$("#submitbutton").removeAttr("disabled");
-		if( $("#selectDecKey").val().indexOf("|0") == -1) $("#submitbutton").text(chrome.i18n.getMessage("encrypt"));
-		else $("#submitbutton").text(chrome.i18n.getMessage("decrypt"));
+		if( $("#selectDecKey").val().indexOf("|0") == -1)
+		{
+			$("#submitbutton").text(chrome.i18n.getMessage("encrypt"));
+			$("#altbutton").text(chrome.i18n.getMessage("verify"));
+			
+			if(toenc.length) $("#submitbutton").removeClass("disabled");
+			if(toenc.indexOf("-----BEGIN PGP SIGNED MESSAGE-----") != -1) $("#altbutton").removeClass("disabled");
+		}
+		else
+		{
+			$("#submitbutton").text(chrome.i18n.getMessage("decrypt"));
+			$("#altbutton").text(chrome.i18n.getMessage("sign"));
+			
+			if(toenc.length) $("#altbutton").removeClass("disabled");
+			if(toenc.indexOf("-----BEGIN PGP MESSAGE-----") != -1) $("#submitbutton").removeClass("disabled");
+		}
 	}
 }
 
@@ -186,4 +254,11 @@ function loadval(key,def)
 	var retval = localStorage.getItem(key);
 	if( retval == undefined ) retval = def;
 	return retval;
+}
+
+function showAlert(content, type)
+{
+	$(".popupOutput").text(content).removeClass("text-danger text-success");
+	if(type == 1) $(".popupOutput").addClass("text-danger");
+	if(type == 2) $(".popupOutput").addClass("text-success");
 }

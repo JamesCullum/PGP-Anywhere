@@ -21,10 +21,10 @@
 		"message":"Bitte gib einen Namen oder eine EMail - Adresse ein!"
 	},
 	"private_key_label": {
-		"message":"Geheimer Schlüssel zur Entschlüsslung"
+		"message":"Geheimer Schlüssel zur Entschlüsslung und Signatur"
 	},
 	"public_key_label": {
-		"message":"Öffentliche Schlüssel zur Verschlüsslung"
+		"message":"Öffentliche Schlüssel zur Verschlüsslung und Verifizierung"
 	},
 	"option": {
 		"message":"Optionen"
@@ -102,10 +102,10 @@
 		"message":"Verarbeiten..."
 	},
 	"internal_key_error": {
-		"message":"Interner Fehler, bitte konfiguriere deine Daten erneut"
+		"message":"Interner Fehler, bitte konfiguriere deine Daten erneut!"
 	},
 	"key_incompatible": {
-		"message":"Dieser Schlüssel ist nicht zu OpenPGP kompatibel"
+		"message":"Dieser Schlüssel ist nicht zu OpenPGP kompatibel!"
 	},
 	"key_pass_error": {
 		"message":"Passwort von Schluessel ungueltig"
@@ -178,5 +178,41 @@
 	},
 	"enter_msg": {
 		"message":"Gib deine Nachricht ein..."
+	},
+	"export": {
+		"message":"Exportieren"
+	},
+	"close": {
+		"message":"Schließen"
+	},
+	"export_title": {
+		"message":"Schlüssel exportieren"
+	},
+	"download": {
+		"message":"Download"
+	},
+	"export_private_desc": {
+		"message":"Geheime PGP - Schlüssel ermöglichen das Lesen verschlüsselter Nachrichten und bestehen aus einem Zertifikat in Form einer Datei und einem Passwort. Wenn PGP Anywhere ein Schlüsselpaar generiert hat wurde ein zufälliges Passwort gewählt.<br><br>Solltest du zu einem anderen Programm wechseln wollen weil dir PGP Anywhere nicht reicht würde ich mich über <a href='mailto:nicolas.giese@web.de'>Feedback</a> freuen!<br><br>Du kannst die Datei über den Knopf unten rechts herunterladen. Dies ist das dazugehörige Passwort, bewahre es nie im Klartext auf."
+	},
+	"export_public_desc": {
+		"message":"Öffentliche PGP - Schlüssel sorgen dafür dass andere Benutzer verschlüsselte Nachrichten an dich senden können. Der öffentliche Schlüssel ist nicht geheim und sollte an jeden deiner Kontaktpersonen in einer sicheren Umgebung übergeben werden. Stelle am besten persönlich oder in einem Telefonat sicher dass der korrekte öffentliche Schlüssel angekommen ist.<br><br>Klicke unten rechts auf den Knopf um die Datei herunterzuladen."
+	},
+	"editor": {
+		"message":"Editor"
+	},
+	"sign": {
+		"message":"Signieren"
+	},
+	"verify": {
+		"message":"Verifizieren"
+	},
+	"sig_matches": {
+		"message":"Die Signatur stimmt mit dem gewählten Schlüssel überein!"
+	},
+	"sig_invalid": {
+		"message":"Die Signatur ist ungültig oder nicht vom gewählten Schlüssel!"
+	},
+	"sign_then_encrypt": {
+		"message":"Deine Nachricht sollte erst signiert und dann verschlüsselt werden!"
 	}
 }

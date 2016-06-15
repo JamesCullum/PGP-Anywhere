@@ -42,12 +42,15 @@ $(document).ready(function() {
 	});
 	$("#selectDecKey").change(function() {
 		var optval = $(this).val();
-		if(optval=="addnew") 
+		if(optval=="addnew")
 		{
 			$("#removebutton, #savekeypassword").attr("disabled","disabled");
 			$("#savekeypassword, #inputEmail, #addpgpdeckey").val("");
+			$("#addbutton").removeClass("btn-primary btn-info").addClass("btn-primary");
+			
+			$("#inputEmail, #addpgpdeckey").keyup();
 		}
-		else 
+		else
 		{
 			$("#removebutton").removeAttr("disabled");
 			
@@ -79,8 +82,10 @@ $(document).ready(function() {
 				}
 				$("#savekeypassword").val("").attr("disabled","disabled");
 			}
+			
+			$("#inputEmail, #addpgpdeckey").keyup();
+			$("#addbutton").removeClass("disabled btn-primary btn-info").addClass("btn-info").text(chrome.i18n.getMessage("export"));
 		}
-		$("#inputEmail, #addpgpdeckey").keyup();
 	});
 	
 	$("#inputMasterPassword").keyup(function() {
@@ -96,7 +101,7 @@ $(document).ready(function() {
 		if( iskey == "addnew" && user.length && !enteredkey.length ) $("#generatekey").removeClass("disabled");
 		else $("#generatekey").addClass("disabled");
 		
-		if( user.length && key.length ) $("#addbutton").removeClass("disabled");
+		if( user.length && key.length ) $("#addbutton").removeClass("disabled btn-primary btn-info").addClass("btn-primary").text(chrome.i18n.getMessage("save"));
 		else $("#addbutton").addClass("disabled");
 	});
 	$("#generatekey").click(function(e) {
@@ -150,15 +155,43 @@ $(document).ready(function() {
 	$("#addbutton").click(function(e) {
 		e.preventDefault();
 		
-		var pass = $("#savekeypassword").val();
-		var email = getAlias();
-		var key = $("#addpgpdeckey").val();
-		if(!email) return;
-		
-		savekey(email, key, pass);
-		$("#inputEmail, #addpgpdeckey, #savekeypassword").val("");
+		if( $(this).hasClass("btn-primary") )
+		{
+			var pass = $("#savekeypassword").val();
+			var email = getAlias();
+			var key = $("#addpgpdeckey").val();
+			if(!email) return;
+			
+			savekey(email, key, pass);
+			$("#inputEmail, #addpgpdeckey, #savekeypassword").val("");
+		}
+		else
+		{
+			var infosplit = $("#selectDecKey").val().split("|");
+			var splitlabel;
+			if(infosplit[1] == "0")
+			{
+				$(".modal-body .well").text($("#savekeypassword").val()).show();
+				$(".modal-body p").html(chrome.i18n.getMessage("export_private_desc"));
+				splitlabel = "private";
+			}
+			else
+			{
+				$(".modal-body .well").text("").hide();
+				$(".modal-body p").html(chrome.i18n.getMessage("export_public_desc"));
+				splitlabel = "public";
+			}
+			$("#downloadKey").attr("download", $("#inputEmail").val()+'.'+splitlabel+'.asc').attr("href", 'data:text/plain;base64,'+btoa($("#addpgpdeckey").val()));
+			
+			if($("#savekeypassword").val().length) $(".modal-body .well").show();
+			else $(".modal-body .well").hide();
+			$(".modal").show();
+		}
 	});
-	
+	$(".modal-header .close, .modal-footer .btn-default").click(function() {
+		$(".modal").hide();
+		$(".modal-body .well").text("");
+	});
 	$("#flushbutton").click(function(e) {
 		e.preventDefault();
 		if(confirm(chrome.i18n.getMessage("delete_confirm")))

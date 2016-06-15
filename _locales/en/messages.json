@@ -1,6 +1,6 @@
 {
 	"manifest_description": {
-		"message":"Encrypt and decrypt PGP on the go"
+		"message":"Use PGP wherever you are"
 	},
 	"generating": {
 		"message":"Generating..."
@@ -21,10 +21,10 @@
 		"message":"Please fill in a name or email address"
 	},
 	"private_key_label": {
-		"message":"Private Keys for Decryption"
+		"message":"Private Keys for Decryption and Signature"
 	},
 	"public_key_label": {
-		"message":"Public Keys for Encryption"
+		"message":"Public Keys for Encryption and Verification"
 	},
 	"option": {
 		"message":"Options"
@@ -102,10 +102,10 @@
 		"message":"Processing..."
 	},
 	"internal_key_error": {
-		"message":"Internal key error, please re-add private key"
+		"message":"Internal key error, please re-add private key!"
 	},
 	"key_incompatible": {
-		"message":"This key is sadly not compatible to OpenPGP"
+		"message":"This key is sadly not compatible to OpenPGP!"
 	},
 	"key_pass_error": {
 		"message":"Key Password invalid"
@@ -178,5 +178,41 @@
 	},
 	"enter_msg": {
 		"message":"Enter your message..."
+	},
+	"export": {
+		"message":"Export"
+	},
+	"close": {
+		"message":"Close"
+	},
+	"export_title": {
+		"message":"Export Key"
+	},
+	"download": {
+		"message":"Download"
+	},
+	"export_private_desc": {
+		"message":"Private PGP keys allow you to read encrypted messages and consists of a certificate as file and a password. If PGP Anywhere created it for you a safe password has been randomly generated for you.<br><br>If you plan on changing to another tool because you find PGP Anywhere insufficient it would be nice to get some <a href='mailto:nicolas.giese@web.de'>feedback</a> from you to improve it!<br><br>You can download the file by using the button in the bottom hand right corner, below is your password that you should never store as plain text."
+	},
+	"export_public_desc": {
+		"message":"Public PGP keys make sure that other people can encrypt the messages they send you. They are not secret and can be shared with anyone you may know or not know yet. Make sure to transfer the key in a safe way and verify with your contact partner in person or by phone that the correct key arrived at their place.<br><br>Click on the download button below to save the file."
+	},
+	"editor": {
+		"message":"Editor"
+	},
+	"sign": {
+		"message":"Sign"
+	},
+	"verify": {
+		"message":"Verify"
+	},
+	"sig_matches": {
+		"message":"Signature matches the selected public key!"
+	},
+	"sig_invalid": {
+		"message":"Signature invalid or not from the selected public key!"
+	},
+	"sign_then_encrypt": {
+		"message":"Your message should be signed first and then encrypted!"
 	}
 }
