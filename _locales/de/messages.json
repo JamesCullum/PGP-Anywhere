@@ -69,10 +69,10 @@
 		"message":"PGP Anywhere verwaltet alle deine PGP Schlüssel. Kopiere öffentliche Schlüssel hierhin um Nachrichten damit zu verschlüsseln oder deine geheimen Schlüssel um Nachrichten an dich zu entschlüsseln."
 	},
 	"paste_key": {
-		"message":"Füge einen Schlüssel ein..."
+		"message":"Kopiere einen Schlüssel hierhin um ihn zu importieren..."
 	},
 	"key_owner_prompt": {
-		"message":"Name oder EMail - Adresse des Besitzers"
+		"message":"Generiere oder importiere einen Schlüssel indem du ihm hier eine Bezeichnung gibst"
 	},
 	"generate_key": {
 		"message":"Schlüssel generieren"

@@ -69,10 +69,10 @@
 		"message":"PGP Anywhere manages all of your keys. Paste public keys of other people to encrypt data or paste your private key to decrypt data sent to you."
 	},
 	"paste_key": {
-		"message":"Paste private or public key..."
+		"message":"Paste private or public key here to import a key..."
 	},
 	"key_owner_prompt": {
-		"message":"Name or email address of key owner"
+		"message":"Generate or import a key by giving it a name here"
 	},
 	"generate_key": {
 		"message":"Generate Keys"
