@@ -116,8 +116,9 @@ $(document).ready(function() {
 		
 		createRandomString(function(createdString) {
 			var createOptions = {
-				numBits: 2048,
+				numBits: 4096,
 				userIds: [{name:user}],
+				keyExpirationTime: oneYear,
 				passphrase: createdString
 			};
 			
