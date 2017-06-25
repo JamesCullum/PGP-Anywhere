@@ -83,6 +83,12 @@
 	"save": {
 		"message":"Save"
 	},
+	"publicKeyUploadOK": {
+		"message":"Public Key has been uploaded"
+	},
+	"questionUploadPublicKey": {
+		"message":"Do you want to upload the public key?"	
+	},
 	"save_changes": {
 		"message":"Save Changes"
 	},
