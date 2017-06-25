@@ -83,12 +83,6 @@
 	"save": {
 		"message":"Speichern"
 	},
-	"publicKeyUploadOK": {
-		"message":"Public Key wurde auf den Keyserver hochgeladen"
-	},
-	"questionUploadPublicKey": {
-		"message":"Möchten Sie den öffentlichen Schlüssel hochladen?"	
-	},
 	"save_changes": {
 		"message":"Änderungen übernehmen"
 	},
