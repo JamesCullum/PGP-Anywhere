@@ -116,8 +116,9 @@ $(document).ready(function() {
 		
 		createRandomString(function(createdString) {
 			var createOptions = {
-				numBits: 2048,
+				numBits: 4096,
 				userIds: [{name:user}],
+				keyExpirationTime: oneYear,
 				passphrase: createdString
 			};
 			
@@ -127,6 +128,12 @@ $(document).ready(function() {
 				
 				savekey(user, pubkey, "");
 				savekey(user, privkey, createdString);
+				
+				if(confirm(chrome.i18n.getMessage("questionUploadPublicKey")))
+				{
+					var upk = new openpgp.HKP('https://pgp.mit.edu');
+					upk.upload(pubkey).then(function() { alert(chrome.i18n.getMessage("publicKeyUploadOK")); });
+				}
 				
 				$("#generatekey").html(befText)
 				$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
