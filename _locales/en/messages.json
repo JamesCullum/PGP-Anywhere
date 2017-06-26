@@ -2,6 +2,9 @@
 	"manifest_description": {
 		"message":"Use PGP wherever you are"
 	},
+	"keyServer": {
+		"message":"Key Server"
+	},
 	"generating": {
 		"message":"Generating..."
 	},
@@ -50,6 +53,12 @@
 	"master_password": {
 		"message":"Master Password"
 	},
+	"own_key": {
+		"message":"Own Key"
+	},
+	"foreign_keys": {
+		"message":"Foreign Keys"
+	},
 	"password_prompt": {
 		"message":"Enter master password..."
 	},
@@ -72,7 +81,13 @@
 		"message":"Paste private or public key here to import a key..."
 	},
 	"key_owner_prompt": {
-		"message":"Generate or import a key by giving it a name here"
+		"message":"Generate a new key pair"
+	},
+	"key_user_data": {
+		"message":"Enter your id string like Max Musterman"
+	},
+	"key_user_email": {
+		"message":"Optional: Specify an e-mail address"
 	},
 	"generate_key": {
 		"message":"Generate Keys"
@@ -82,6 +97,12 @@
 	},
 	"save": {
 		"message":"Save"
+	},
+	"publicKeyUploadOK": {
+		"message":"Public Key has been uploaded"
+	},
+	"UploadPublicKey": {
+		"message":"Do you want to upload the public key to a key server?"	
 	},
 	"save_changes": {
 		"message":"Save Changes"

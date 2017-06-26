@@ -2,6 +2,9 @@
 	"manifest_description": {
 		"message":"PGP für die Hosentasche"
 	},
+	"keyServer": {
+		"message":"Key Server"
+	},
 	"generating": {
 		"message":"Wird generiert..."
 	},
@@ -50,6 +53,12 @@
 	"master_password": {
 		"message":"Master Passwort"
 	},
+	"own_key": {
+		"message":"Eigener Schlüssel"
+	},
+	"foreign_keys": {
+		"message":"Fremd Schlüssel"
+	},
 	"password_prompt": {
 		"message":"Master Passwort eingeben..."
 	},
@@ -72,7 +81,13 @@
 		"message":"Kopiere einen Schlüssel hierhin um ihn zu importieren..."
 	},
 	"key_owner_prompt": {
-		"message":"Generiere oder importiere einen Schlüssel indem du ihm hier eine Bezeichnung gibst"
+		"message":"Generiere ein neues Schlüsselpaar"
+	},
+	"key_user_data": {
+		"message":"Gebe deine ID an, z.B.: Max Musterman"
+	},
+	"key_user_email": {
+		"message":"Optional: Gebe Sie eine E-Mail Adresse an"
 	},
 	"generate_key": {
 		"message":"Schlüssel generieren"
@@ -82,6 +97,12 @@
 	},
 	"save": {
 		"message":"Speichern"
+	},
+	"publicKeyUploadOK": {
+		"message":"Public Key wurde auf den Keyserver hochgeladen"
+	},
+	"UploadPublicKey": {
+		"message":"Möchten Sie den öffentlichen Schlüssel auf einen KeyServer hochladen?"	
 	},
 	"save_changes": {
 		"message":"Änderungen übernehmen"

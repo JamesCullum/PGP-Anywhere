@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="css/font-awesome.min.css">
 		<link rel="stylesheet" href="css/skin.css">
 		
-		<script src="../js/jquery-1.8.3.min.js"></script>
+		<script src="../js/jquery.min.js"></script>
 		<script src="../js/bootstrap.min.js"></script>
 		<script src="../js/openpgp.min.js"></script>
 		<script src="../js/sjcl.js"></script>
@@ -49,10 +49,13 @@
 				<a class="btn btn-primary btn-sm pull-right l18n" href="https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb/reviews" target="_gorate">__MSG_support_button__</a>
 			</p>
 		</div>
+		<div style="margin-top:10px;text-align:right;" class="well bs-component center-container">
+			<button type="reset" class="btn btn-default l18n" id="flushbutton">__MSG_delete_data__</button>
+		</div>
 		<div style="margin-top:10px;" class="well bs-component center-container">
 			<form class="form-horizontal">
 			  <fieldset>
-				<legend class="l18n">__MSG_settings__</legend>
+				<legend class="l18n">__MSG_settings__ - __MSG_master_password__</legend>
 				<div class="form-group masterGroup">
 					<label for="inputPassword" class="col-lg-2 control-label l18n">
 						__MSG_master_password__
@@ -63,6 +66,46 @@
 						<span class="help-block l18n">__MSG_password_info__</span>
 					</div>
 				</div>
+				<div class="form-group">
+				  <div class="col-lg-10 col-lg-offset-2">
+					<button type="submit" class="btn btn-primary l18n" id="submitbutton">__MSG_save_changes__</button>
+				  </div>
+				</div>
+			  </fieldset>
+			</form>
+		</div>
+		<div style="margin-top:10px;" class="well bs-component center-container">
+			<form class="form-horizontal">
+			  <fieldset>
+				<legend class="l18n">__MSG_settings__ - __MSG_own_key__</legend>
+									<span class="help-block l18n">__MSG_key_owner_prompt__</span>
+				<div class="form-group ownKeyGroup">
+					<label for="inputUsername" class="col-lg-2 control-label l18n">__MSG_generate_key__</label>
+					<div class="spacer"></div>
+					<div class="col-lg-10">
+						<input type="text" class="form-control l18n" id="inputUsername" placeholder="__MSG_key_user_data__">
+						<div class="spacer"></div>
+						<input type="text" class="form-control l18n" id="inputEmail" placeholder="__MSG_key_user_email__">
+					</div>
+					<div class="spacer"></div>
+					<label for="inputKeyUpload" class="col-lg-2 control-label l18n">__MSG_keyServer__</label>
+					<div class="col-lg-10">
+						<div class="checkbox">
+							<label class="l18n"><input type="checkbox" id="inputKeyUpload">__MSG_UploadPublicKey__</label>
+						</div>
+					</div>
+				<div class="form-group">
+				  <div class="col-lg-10 col-lg-offset-2">
+					<button type="submit" class="btn btn-info disabled l18n" id="generatekey">__MSG_generate_key__</button>
+				  </div>
+				</div>
+			  </fieldset>
+			</form>
+		</div>
+		<div style="margin-top:10px;" class="well bs-component center-container">
+			<form class="form-horizontal">
+			  <fieldset>
+				<legend class="l18n">__MSG_settings__ - __MSG_foreign_keys__</legend>
 				<div class="form-group keyGroup">
 					<label for="selectDecKey" class="col-lg-2 control-label l18n">__MSG_manage_keys__</label>
 					<div class="col-lg-10">
@@ -75,13 +118,7 @@
 						<span class="help-block l18n">__MSG_function_info__</span>
 						<div id="addkeyform">
 							<textarea class="form-control l18n" rows="5" id="addpgpdeckey" placeholder="__MSG_paste_key__"></textarea>
-							<div class="spacer"></div>
-							<div class="input-group">
-								<input type="text" class="form-control l18n" id="inputEmail" placeholder="__MSG_key_owner_prompt__">
-								<span class="input-group-btn">
-									<button type="submit" class="btn btn-info disabled l18n" id="generatekey">__MSG_generate_key__</button>
-								</span>
-							</div>
+
 							<div class="spacer"></div>
 							<div class="input-group">
 								<input type="password" class="form-control l18n" id="savekeypassword" placeholder="__MSG_private_pass__" disabled>
@@ -91,12 +128,6 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class="form-group">
-				  <div class="col-lg-10 col-lg-offset-2">
-					<button type="submit" class="btn btn-primary l18n" id="submitbutton">__MSG_save_changes__</button>
-					<button type="reset" class="btn btn-default l18n" id="flushbutton">__MSG_delete_data__</button>
-				  </div>
 				</div>
 			  </fieldset>
 			</form>

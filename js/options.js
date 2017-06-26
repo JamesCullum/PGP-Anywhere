@@ -45,10 +45,10 @@ $(document).ready(function() {
 		if(optval=="addnew")
 		{
 			$("#removebutton, #savekeypassword").attr("disabled","disabled");
-			$("#savekeypassword, #inputEmail, #addpgpdeckey").val("");
+			$("#savekeypassword, #inputUsername, #addpgpdeckey").val("");
 			$("#addbutton").removeClass("btn-primary btn-info").addClass("btn-primary");
 			
-			$("#inputEmail, #addpgpdeckey").keyup();
+			$("#inputUsername, #addpgpdeckey").keyup();
 		}
 		else
 		{
@@ -63,7 +63,7 @@ $(document).ready(function() {
 					if( container[i].email == infosplit[0] ) 
 					{
 						$("#savekeypassword").val(container[i].password);
-						$("#inputEmail").val(container[i].email);
+						$("#inputUsername").val(container[i].email);
 						$("#addpgpdeckey").val(container[i].key);
 					}
 				}
@@ -76,14 +76,14 @@ $(document).ready(function() {
 				{
 					if( container[i].email == infosplit[0] ) 
 					{
-						$("#inputEmail").val(container[i].email);
+						$("#inputUsername").val(container[i].email);
 						$("#addpgpdeckey").val(container[i].key);
 					}
 				}
 				$("#savekeypassword").val("").attr("disabled","disabled");
 			}
 			
-			$("#inputEmail, #addpgpdeckey").keyup();
+			$("#inputUsername, #addpgpdeckey").keyup();
 			$("#addbutton").removeClass("disabled btn-primary btn-info").addClass("btn-info").text(chrome.i18n.getMessage("export"));
 		}
 	});
@@ -92,8 +92,8 @@ $(document).ready(function() {
 		$("#inputMasterPassword2").val("").show();
 	});
 	
-	$("#inputEmail, #addpgpdeckey").keyup(function() {
-		var user = $("#inputEmail").val();
+	$("#inputUsername, #addpgpdeckey").keyup(function() {
+		var user = $("#inputUsername").val();
 		var key = $("#addpgpdeckey").val();
 		var iskey = $("#selectDecKey").val();
 		var enteredkey = $("#addpgpdeckey").val();
@@ -108,16 +108,17 @@ $(document).ready(function() {
 		e.preventDefault();
 		
 		var user = getAlias();
+		var email = $("#inputEmail").val();
 		if(!user) return;
 		
-		$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").addClass("disabled").attr("disabled", "disabled");
+		$("#addpgpdeckey, #inputUsername, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").addClass("disabled").attr("disabled", "disabled");
 		var befText = $(this).html();
 		$(this).html(chrome.i18n.getMessage("generating") + ' <i class="fa fa-cog fa-spin"></i>');
 		
 		createRandomString(function(createdString) {
 			var createOptions = {
-				numBits: 2048,
-				userIds: [{name:user}],
+				numBits: 4096,
+				userIds: [{name:user, email:email }],
 				passphrase: createdString
 			};
 			
@@ -128,8 +129,14 @@ $(document).ready(function() {
 				savekey(user, pubkey, "");
 				savekey(user, privkey, createdString);
 				
+				if($("#inputKeyUpload").is(':checked'))
+				{
+					var upk = new openpgp.HKP('https://pgp.mit.edu');
+					upk.upload(pubkey).then(function() { alert(chrome.i18n.getMessage("publicKeyUploadOK")); });
+				}
+				
 				$("#generatekey").html(befText)
-				$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
+				$("#addpgpdeckey, #inputUsername, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
 				$("#selectDecKey").val(user+"|1").change();
 			}).catch(function(error) {
 				alert(error);
@@ -149,7 +156,7 @@ $(document).ready(function() {
 		else savekeyring("public",container);
 		
 		$("option[value='"+remindex+"']","#selectDecKey").remove();
-		$("#savekeypassword, #inputEmail, #addpgpdeckey").val("");
+		$("#savekeypassword, #inputUsername, #addpgpdeckey").val("");
 		$("#selectDecKey").change();
 	});
 	$("#addbutton").click(function(e) {
@@ -163,7 +170,7 @@ $(document).ready(function() {
 			if(!email) return;
 			
 			savekey(email, key, pass);
-			$("#inputEmail, #addpgpdeckey, #savekeypassword").val("");
+			$("#inputUsername, #addpgpdeckey, #savekeypassword").val("");
 		}
 		else
 		{
@@ -181,7 +188,7 @@ $(document).ready(function() {
 				$(".modal-body p").html(chrome.i18n.getMessage("export_public_desc"));
 				splitlabel = "public";
 			}
-			$("#downloadKey").attr("download", $("#inputEmail").val()+'.'+splitlabel+'.asc').attr("href", 'data:text/plain;base64,'+btoa($("#addpgpdeckey").val()));
+			$("#downloadKey").attr("download", $("#inputUsername").val()+'.'+splitlabel+'.asc').attr("href", 'data:text/plain;base64,'+btoa($("#addpgpdeckey").val()));
 			
 			if($("#savekeypassword").val().length) $(".modal-body .well").show();
 			else $(".modal-body .well").hide();
@@ -299,13 +306,13 @@ function savekey(email, key, pass)
 
 function getAlias()
 {
-	var user = $("#inputEmail").val();
+	var user = $("#inputUsername").val();
 	if(!user.length)
 	{
-		var bef = $("#inputEmail").css("border");
-		$("#inputEmail").css("border","1px solid red");
+		var bef = $("#inputUsername").css("border");
+		$("#inputUsername").css("border","1px solid red");
 		alert(chrome.i18n.getMessage("require_identity"));
-		$("#inputEmail").css("border",bef);
+		$("#inputUsername").css("border",bef);
 		return false;
 	}
 	return user;
