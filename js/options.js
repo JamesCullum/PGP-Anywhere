@@ -118,7 +118,6 @@ $(document).ready(function() {
 			var createOptions = {
 				numBits: 4096,
 				userIds: [{name:user}],
-				keyExpirationTime: oneYear,
 				passphrase: createdString
 			};
 			

@@ -50,6 +50,12 @@
 	"master_password": {
 		"message":"Master Password"
 	},
+	"own_key": {
+		"message":"Own Key"
+	},
+	"foreign_keys": {
+		"message":"Foreign Keys"
+	},
 	"password_prompt": {
 		"message":"Enter master password..."
 	},
@@ -72,7 +78,10 @@
 		"message":"Paste private or public key here to import a key..."
 	},
 	"key_owner_prompt": {
-		"message":"Generate or import a key by giving it a name here"
+		"message":"Generate a new key pair"
+	},
+	"key_user_data": {
+		"message":"Enter your id string like Max Musterman <max.musterman@example.com>"
 	},
 	"generate_key": {
 		"message":"Generate Keys"
