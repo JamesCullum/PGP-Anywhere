@@ -84,7 +84,10 @@
 		"message":"Generiere ein neues Schlüsselpaar"
 	},
 	"key_user_data": {
-		"message":"Gebe deine ID an, z.B.: Max Musterman <max.musterman@example.com>"
+		"message":"Gebe deine ID an, z.B.: Max Musterman"
+	},
+	"key_user_email": {
+		"message":"Optional: Gebe Sie eine E-Mail Adresse an"
 	},
 	"generate_key": {
 		"message":"Schlüssel generieren"

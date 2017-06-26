@@ -84,7 +84,10 @@
 		"message":"Generate a new key pair"
 	},
 	"key_user_data": {
-		"message":"Enter your id string like Max Musterman <max.musterman@example.com>"
+		"message":"Enter your id string like Max Musterman"
+	},
+	"key_user_email": {
+		"message":"Optional: Specify an e-mail address"
 	},
 	"generate_key": {
 		"message":"Generate Keys"
