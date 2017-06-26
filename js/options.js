@@ -128,7 +128,7 @@ $(document).ready(function() {
 				savekey(user, pubkey, "");
 				savekey(user, privkey, createdString);
 				
-				if(confirm(chrome.i18n.getMessage("questionUploadPublicKey")))
+				if($("#inputKeyUpload").is(':checked'))
 				{
 					var upk = new openpgp.HKP('https://pgp.mit.edu');
 					upk.upload(pubkey).then(function() { alert(chrome.i18n.getMessage("publicKeyUploadOK")); });

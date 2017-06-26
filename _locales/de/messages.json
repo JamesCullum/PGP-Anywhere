@@ -2,6 +2,9 @@
 	"manifest_description": {
 		"message":"PGP für die Hosentasche"
 	},
+	"keyServer": {
+		"message":"Key Server"
+	},
 	"generating": {
 		"message":"Wird generiert..."
 	},
@@ -95,8 +98,8 @@
 	"publicKeyUploadOK": {
 		"message":"Public Key wurde auf den Keyserver hochgeladen"
 	},
-	"questionUploadPublicKey": {
-		"message":"Möchten Sie den öffentlichen Schlüssel hochladen?"	
+	"UploadPublicKey": {
+		"message":"Möchten Sie den öffentlichen Schlüssel auf einen KeyServer hochladen?"	
 	},
 	"save_changes": {
 		"message":"Änderungen übernehmen"

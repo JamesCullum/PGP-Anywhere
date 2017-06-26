@@ -2,6 +2,9 @@
 	"manifest_description": {
 		"message":"Use PGP wherever you are"
 	},
+	"keyServer": {
+		"message":"Key Server"
+	},
 	"generating": {
 		"message":"Generating..."
 	},
@@ -95,8 +98,8 @@
 	"publicKeyUploadOK": {
 		"message":"Public Key has been uploaded"
 	},
-	"questionUploadPublicKey": {
-		"message":"Do you want to upload the public key?"	
+	"UploadPublicKey": {
+		"message":"Do you want to upload the public key to a key server?"	
 	},
 	"save_changes": {
 		"message":"Save Changes"
