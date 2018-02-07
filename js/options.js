@@ -2,10 +2,6 @@ var masterpw = "", syncloadcount = 0, syncsetcount = 0, synccounter = 0;
 var bcrypt = new bCrypt();
 
 $(document).ready(function() {
-	var randParanoia = 10;
-	sjcl.random = new sjcl.prng(randParanoia);
-	sjcl.random.startCollectors();
-	
 	var options = {
 		rules: {
 			activated: {
@@ -114,27 +110,26 @@ $(document).ready(function() {
 		var befText = $(this).html();
 		$(this).html(chrome.i18n.getMessage("generating") + ' <i class="fa fa-cog fa-spin"></i>');
 		
-		createRandomString(function(createdString) {
-			var createOptions = {
-				numBits: 2048,
-				userIds: [{name:user}],
-				passphrase: createdString
-			};
+		var createdString = createRandomString(30);
+		var createOptions = {
+			numBits: 2048,
+			userIds: [{name:user}],
+			passphrase: createdString
+		};
+		
+		openpgp.generateKey(createOptions).then(function(keypair) {
+			var privkey = keypair.privateKeyArmored;
+			var pubkey = keypair.publicKeyArmored;
 			
-			openpgp.generateKey(createOptions).then(function(keypair) {
-				var privkey = keypair.privateKeyArmored;
-				var pubkey = keypair.publicKeyArmored;
-				
-				savekey(user, pubkey, "");
-				savekey(user, privkey, createdString);
-				
-				$("#generatekey").html(befText)
-				$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
-				$("#selectDecKey").val(user+"|1").change();
-			}).catch(function(error) {
-				alert(error);
-			});
-		}, 30);
+			savekey(user, pubkey, "");
+			savekey(user, privkey, createdString);
+			
+			$("#generatekey").html(befText)
+			$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
+			$("#selectDecKey").val(user+"|1").change();
+		}).catch(function(error) {
+			alert(error);
+		});
 	});	
 	
 	$("#removebutton").click(function(e) {
@@ -389,19 +384,22 @@ function getshahash(str)
 	return hash;
 }
 
-function createRandomString (callback, length) {
-  var randomBase64String = '',
-  checkReadyness;
-
-  checkReadyness = setInterval(function () {
-    if(sjcl.random.isReady(10)) {
-      while(randomBase64String.length < length) {
-        randomInt = sjcl.random.randomWords(1, 10)[0];
-        randomBase64String += btoa(randomInt);
-      }
-      randomBase64String = randomBase64String.substr(0, length);
-      callback(randomBase64String);
-      clearInterval(checkReadyness);
+function createRandomString(length)
+{
+    var charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var i;
+    var result = "";
+    if(window.crypto && window.crypto.getRandomValues)
+    {
+        values = new Uint32Array(length);
+        window.crypto.getRandomValues(values);
+        for(i=0; i<length; i++)
+        {
+            result += charset[values[i] % charset.length];
+        }
+        return result;
     }
-  }, 1);
+    else {
+		alert("Your browser appears to be outdated and can't generate secure random numbers. If this is a mistake, please refer to the GitHub page to report a bug.");
+	}
 }
