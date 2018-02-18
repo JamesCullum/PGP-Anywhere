@@ -1,6 +1,7 @@
-var decpw = false, syncloadcount = 0, synccounter = 0;
+var decpw = false, syncloadcount = 0, synccounter = 0, syncId = false;
 
 init();
+test_sync();
 init_sync(0);
 
 chrome.runtime.onMessage.addListener(
@@ -9,12 +10,13 @@ chrome.runtime.onMessage.addListener(
 		{
 			chrome.runtime.sendMessage({ msg: "masterauth_answer", "auth": decpw, process: request.process });
 			sendResponse(true);
-		}
-		else if(request.msg == "unlock")
-		{
+		} else if(request.msg == "unlock") {
 			chrome.browserAction.setPopup({popup:"html/popup.html"});
 			chrome.browserAction.setIcon({path:"img/favicon_19.png"});
 			decpw = request.auth;
+			sendResponse(true);
+		} else if(request.msg == "syncId") {
+			chrome.runtime.sendMessage({ msg: "syncId_answer", "id": syncId });
 			sendResponse(true);
 		}
     }
@@ -30,109 +32,123 @@ function init()
 	{
 		chrome.browserAction.setPopup({popup:"html/unlock.html"});
 		chrome.browserAction.setIcon({path:"img/favicon_lock.png"});
-	}
-	else 
-	{
+	} else {
 		chrome.browserAction.setPopup({popup:"html/popup.html"});
 		chrome.browserAction.setIcon({path:"img/favicon_19.png"});
 	}
 }
 
+function test_sync() {
+	if(syncId != false) return;
+	
+	chrome.identity.getProfileUserInfo(function(data) {
+		if (data.id) {
+			console.log("User is logged in");
+			syncId = data.id;
+		} else {
+			console.warn("User is not logged into Chrome - won't sync anything");
+		}
+	});
+}
+
 function init_sync(tutorial)
 {
-	chrome.storage.sync.get("pgpanywhere_sync_set", function (sync_container) {
-		if(jQuery.isEmptyObject(sync_container)) 
-		{
-			if(tutorial) window.open("html/tutorial.html");
-			return;
-		}
+	// Verify that the user is logged in before overriding the local keyring with cloud data
+	if(syncId != false) {
+		chrome.storage.sync.get("pgpanywhere_sync_set", function (sync_container) {
+			if(jQuery.isEmptyObject(sync_container)) 
+			{
+				if(tutorial) window.open("html/tutorial.html");
+				return;
+			}
 
-		syncloadcount = 0;
-		synccounter = 0;
-		
-		addSyncElement(3);
-		chrome.storage.sync.get("pgpanywhere_sync_container_settings", function (sync_container) {
-			var decdata = jQuery.parseJSON(sync_container.pgpanywhere_sync_container_settings);
+			syncloadcount = 0;
+			synccounter = 0;
+			
+			addSyncElement(3);
+			chrome.storage.sync.get("pgpanywhere_sync_container_settings", function (sync_container) {
+				var decdata = jQuery.parseJSON(sync_container.pgpanywhere_sync_container_settings);
 
-			localStorage.setItem("pgpanywhere_encrypted", decdata.encrypted);
-			localStorage.setItem("pgpanywhere_encrypted_hash",  decdata.hash );
-			onsyncload();
-		});
-		
-		// Public Keys
-		chrome.storage.sync.get("pgpanywhere_sync_container_publickeys", function (sync_container) {
-			onsyncload();
+				localStorage.setItem("pgpanywhere_encrypted", decdata.encrypted);
+				localStorage.setItem("pgpanywhere_encrypted_hash",  decdata.hash );
+				onsyncload();
+			});
 			
-			if(jQuery.isEmptyObject(sync_container))
-			{
-				addSyncElement(1);
-				chrome.storage.sync.get("pgpanywhere_sync_public_list", function (sync_container) {
-					onsyncload();
-					
-					if(!jQuery.isEmptyObject(sync_container))
-					{
-						var keylist = parseInt(sync_container.pgpanywhere_sync_public_list);
-						localStorage.setItem("pgpanywhere_sync_public_queue", "[]");
-						addSyncElement(keylist);
-						for(var i=0;i<keylist;i++)
+			// Public Keys
+			chrome.storage.sync.get("pgpanywhere_sync_container_publickeys", function (sync_container) {
+				onsyncload();
+				
+				if(jQuery.isEmptyObject(sync_container))
+				{
+					addSyncElement(1);
+					chrome.storage.sync.get("pgpanywhere_sync_public_list", function (sync_container) {
+						onsyncload();
+						
+						if(!jQuery.isEmptyObject(sync_container))
 						{
-							var sync_label = "pgpanywhere_sync_public_"+i;
-							chrome.storage.sync.get(sync_label, function (sync_container) {
-								var queue = jQuery.parseJSON(loadval("pgpanywhere_sync_public_queue","[]"));
-								if(!jQuery.isEmptyObject(sync_container)) 
-								{
-									var pushme = sync_container[Object.keys(sync_container)[0]];
-									if(pushme.length) queue.push(pushme);
-								}
-								localStorage.setItem("pgpanywhere_sync_public_queue", JSON.stringify(queue) );
-							});
+							var keylist = parseInt(sync_container.pgpanywhere_sync_public_list);
+							localStorage.setItem("pgpanywhere_sync_public_queue", "[]");
+							addSyncElement(keylist);
+							for(var i=0;i<keylist;i++)
+							{
+								var sync_label = "pgpanywhere_sync_public_"+i;
+								chrome.storage.sync.get(sync_label, function (sync_container) {
+									var queue = jQuery.parseJSON(loadval("pgpanywhere_sync_public_queue","[]"));
+									if(!jQuery.isEmptyObject(sync_container)) 
+									{
+										var pushme = sync_container[Object.keys(sync_container)[0]];
+										if(pushme.length) queue.push(pushme);
+									}
+									localStorage.setItem("pgpanywhere_sync_public_queue", JSON.stringify(queue) );
+								});
+							}
 						}
-					}
-				});
-			}
-			else 
-			{
-				localStorage.setItem("pgpanywhere_public_keyring", sync_container.pgpanywhere_sync_container_publickeys );
-			}
-		});
-		
-		// Private Keys
-		chrome.storage.sync.get("pgpanywhere_sync_container_privatekeys", function (sync_container) {
-			onsyncload();
+					});
+				}
+				else 
+				{
+					localStorage.setItem("pgpanywhere_public_keyring", sync_container.pgpanywhere_sync_container_publickeys );
+				}
+			});
 			
-			if(jQuery.isEmptyObject(sync_container))
-			{
-				addSyncElement(1);
-				chrome.storage.sync.get("pgpanywhere_sync_private_list", function (sync_container) {
-					onsyncload();
-					
-					if(!jQuery.isEmptyObject(sync_container))
-					{
-						var keylist = parseInt(sync_container.pgpanywhere_sync_private_list);
-						localStorage.setItem("pgpanywhere_sync_private_queue", "[]");
-						addSyncElement(keylist);
-						for(var i=0;i<keylist;i++)
+			// Private Keys
+			chrome.storage.sync.get("pgpanywhere_sync_container_privatekeys", function (sync_container) {
+				onsyncload();
+				
+				if(jQuery.isEmptyObject(sync_container))
+				{
+					addSyncElement(1);
+					chrome.storage.sync.get("pgpanywhere_sync_private_list", function (sync_container) {
+						onsyncload();
+						
+						if(!jQuery.isEmptyObject(sync_container))
 						{
-							var sync_label = "pgpanywhere_sync_private_"+i;
-							chrome.storage.sync.get(sync_label, function (sync_container) {
-								var queue = jQuery.parseJSON(loadval("pgpanywhere_sync_private_queue","[]"));
-								if(!jQuery.isEmptyObject(sync_container)) 
-								{
-									var pushme = sync_container[Object.keys(sync_container)[0]];
-									queue.push(pushme);
-								}
-								localStorage.setItem("pgpanywhere_sync_private_queue", JSON.stringify(queue) );
-							});
+							var keylist = parseInt(sync_container.pgpanywhere_sync_private_list);
+							localStorage.setItem("pgpanywhere_sync_private_queue", "[]");
+							addSyncElement(keylist);
+							for(var i=0;i<keylist;i++)
+							{
+								var sync_label = "pgpanywhere_sync_private_"+i;
+								chrome.storage.sync.get(sync_label, function (sync_container) {
+									var queue = jQuery.parseJSON(loadval("pgpanywhere_sync_private_queue","[]"));
+									if(!jQuery.isEmptyObject(sync_container)) 
+									{
+										var pushme = sync_container[Object.keys(sync_container)[0]];
+										queue.push(pushme);
+									}
+									localStorage.setItem("pgpanywhere_sync_private_queue", JSON.stringify(queue) );
+								});
+							}
 						}
-					}
-				});
-			}
-			else 
-			{
-				localStorage.setItem("pgpanywhere_private_keyring", sync_container.pgpanywhere_sync_container_publickeys );
-			}
+					});
+				}
+				else 
+				{
+					localStorage.setItem("pgpanywhere_private_keyring", sync_container.pgpanywhere_sync_container_publickeys );
+				}
+			});
 		});
-	});
+	}
 }
 
 function loadval(key,def)
