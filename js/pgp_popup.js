@@ -33,7 +33,7 @@ $(document).ready(function() {
 		window.open("/html/options.html");
 	});
 	$("#selectDecKey").change(onkeysel);
-	$("#submitbutton").click(function(e) {
+	$("#submitbutton").click(async function(e) {
 		e.preventDefault();
 		showAlert("", 0);
 		
@@ -41,7 +41,7 @@ $(document).ready(function() {
 		var infosplit = encindex.split("|");
 		
 		var toenc = $("#decpgptxt").val();
-		if( !toenc.length || ( infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') == -1 ) ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
+		if( !toenc.length || ( infosplit[1] == "0" && toenc.indexOf(' MESSAGE-----') == -1 ) ) return $("#decpgptxt").closest(".form-group").addClass("has-error");
 		$("#decpgptxt").closest(".form-group").removeClass("has-error");
 		
 		var befText = $(this).html();
@@ -62,10 +62,10 @@ $(document).ready(function() {
 				}
 			}
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var privateKey = openpgp.key.readArmored(goKey).keys[0];
-			pgpMessage = openpgp.message.readArmored(toenc);
-			openpgp.decryptKey({"privateKey": privateKey, passphrase: keypass}).then(function(retdec) {
-				openpgp.decrypt({message:pgpMessage,privateKey:privateKey}).then(function(plaintext) {
+			var privateKey = (await openpgp.key.readArmored(goKey)).keys[0];
+			var pgpMessage = await openpgp.message.readArmored(toenc);
+			privateKey.decrypt(keypass).then(function(retdec) {
+				openpgp.decrypt({message:pgpMessage, privateKeys:privateKey}).then(function(plaintext) {
 					$("#submitbutton").html(befText).removeClass("disabled");
 					$("#decpgptxt").val(plaintext.data);
 					onkeysel();
@@ -84,13 +84,13 @@ $(document).ready(function() {
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var publicKey = openpgp.key.readArmored(goKey).keys; //[0]
+			var publicKey = (await openpgp.key.readArmored(goKey)).keys; //[0]
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#submitbutton").html(befText).removeClass("disabled");
 				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
 			}
-			openpgp.encrypt({data:toenc,publicKeys:publicKey}).then(function(pgpMessage) {
+			openpgp.encrypt({message: openpgp.message.fromText(toenc), publicKeys: publicKey[0]}).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
 				$("#decpgptxt").val(pgpMessage.data);
 				onkeysel();
@@ -100,7 +100,7 @@ $(document).ready(function() {
 			});
 		}
 	});
-	$("#altbutton").click(function(e) {
+	$("#altbutton").click(async function(e) {
 		e.preventDefault();
 		showAlert("", 0);
 		
@@ -108,8 +108,8 @@ $(document).ready(function() {
 		var infosplit = encindex.split("|");
 		
 		var toenc = $("#decpgptxt").val();
-		if( !toenc.length || (infosplit[1] == "1" && toenc.indexOf('-----BEGIN PGP SIGNED MESSAGE-----') == -1)) return $("#decpgptxt").closest(".form-group").addClass("has-error");
-		if(infosplit[1] == "0" && toenc.indexOf('-----BEGIN PGP MESSAGE-----') != -1) return showAlert(chrome.i18n.getMessage("sign_then_encrypt"), 1);
+		if( !toenc.length || (infosplit[1] == "1" && toenc.indexOf(' MESSAGE-----') == -1)) return $("#decpgptxt").closest(".form-group").addClass("has-error");
+		if(infosplit[1] == "0" && toenc.indexOf(' MESSAGE-----') != -1) return showAlert(chrome.i18n.getMessage("sign_then_encrypt"), 1);
 		$("#decpgptxt").closest(".form-group").removeClass("has-error");
 		
 		var befText = $(this).html();
@@ -130,9 +130,9 @@ $(document).ready(function() {
 				}
 			}
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var privateKey = openpgp.key.readArmored(goKey).keys[0];
-			openpgp.decryptKey({"privateKey": privateKey, passphrase: keypass}).then(function(retdec) {
-				openpgp.sign({data:toenc,privateKeys:privateKey}).then(function(signed) {
+			var privateKey = (await openpgp.key.readArmored(goKey)).keys[0];
+			privateKey.decrypt(keypass).then(function(retdec) {
+				openpgp.sign({message:openpgp.message.fromText(toenc), privateKeys:privateKey}).then(function(signed) {
 					$("#altbutton").html(befText).removeClass("disabled");
 					$("#decpgptxt").val(signed.data.trim());
 					onkeysel();
@@ -151,19 +151,21 @@ $(document).ready(function() {
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var publicKey = openpgp.key.readArmored(goKey).keys; //[0]
+			var publicKey = (await openpgp.key.readArmored(goKey)).keys; //[0]
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#altbutton").html(befText).removeClass("disabled");
 				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
 			}
-			openpgp.verify({message: openpgp.cleartext.readArmored(toenc),publicKeys: publicKey}).then(function(sigCheck) {
-				console.log(sigCheck);
+			var pgpMessage = await openpgp.message.readArmored(toenc);
+			openpgp.verify({message: pgpMessage, publicKeys: publicKey}).then(function(sigCheck) {
+				//console.log("sigCheck", sigCheck);
 				$("#altbutton").html(befText).removeClass("disabled");
 				if(sigCheck.data.length && sigCheck.signatures[0].valid && sigCheck.signatures[0].keyid.toHex() == publicKey[0].primaryKey.keyid.toHex())
 				{
 					showAlert(chrome.i18n.getMessage("sig_matches"), 2);
-					$("#decpgptxt").val(sigCheck.data.trim());
+					var insideText = new TextDecoder("utf-8").decode(sigCheck.data);
+					$("#decpgptxt").val(insideText.trim());
 					onkeysel();
 				}
 				else showAlert(chrome.i18n.getMessage("sig_invalid"), 1);
@@ -197,7 +199,7 @@ function onkeysel()
 			$("#altbutton").text(chrome.i18n.getMessage("verify"));
 			
 			if(toenc.length) $("#submitbutton").removeClass("disabled");
-			if(toenc.indexOf("-----BEGIN PGP SIGNED MESSAGE-----") != -1) $("#altbutton").removeClass("disabled");
+			if(toenc.indexOf(" MESSAGE-----") != -1) $("#altbutton").removeClass("disabled");
 		}
 		else
 		{
