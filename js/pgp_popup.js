@@ -3,10 +3,8 @@ var sizestate = false;
 $(document).ready(function() {
 	if(loadval("pgpanywhere_encrypted",0)==1)
 	{
-		$.getScript("/js/master_auth.js", function() {
-			master_auth(function(decpw) {
-				loadkeyrings();
-			});
+		master_auth(function(decpw) {
+			loadkeyrings();
 		});
 	}
 	else loadkeyrings();

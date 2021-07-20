@@ -19,14 +19,12 @@ $(document).ready(function() {
 	
 	if( loadval("pgpanywhere_encrypted",0)==1 )
 	{
-		$.getScript("/js/master_auth.js", function() {
-			master_auth(function(decpw) {
-				masterpw = decpw;
-				$("#inputMasterPassword").val(decpw);
-				$("#inputMasterPassword2").val(decpw);
-				$("#inputMasterPassword").pwstrength("forceUpdate");
-				loadkeyrings();
-			});
+		master_auth(function(decpw) {
+			masterpw = decpw;
+			$("#inputMasterPassword").val(decpw);
+			$("#inputMasterPassword2").val(decpw);
+			$("#inputMasterPassword").pwstrength("forceUpdate");
+			loadkeyrings();
 		});
 	}
 	else loadkeyrings();
