@@ -1,9 +1,13 @@
 # PGP Anywhere
-Install via [Chrome Webstore]. Encrypt and decrypt PGP wherever you are!
->License: GNUv2
 
+Install via [Chrome Webstore]. Encrypt and decrypt PGP wherever you are!
+
+> License: GNUv2
+
+The plugin is temporarily not available on the Chrome Webstore due to [@lonesomewalker](https://github.com/lonesomewalker) impersonating the author of the plugin and filing a falsified DMCA report. A counter report has been opened.
 
 # Features
+
 - Hashed using [bCrypt] (10 iterations)
 - Encrypted using [SJCL]
 - Clientside Encryption of all userdata
@@ -11,7 +15,7 @@ Install via [Chrome Webstore]. Encrypt and decrypt PGP wherever you are!
 - Open Source
 - Encrypted Cloud Synchronization
 
-[ProtonMail]:https://protonmail.ch/
-[bCrypt]:https://de.wikipedia.org/wiki/Bcrypt
-[SJCL]:https://github.com/bitwiseshiftleft/sjcl
-[Chrome Webstore]:https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb
+[ProtonMail]: https://protonmail.ch/
+[bCrypt]: https://de.wikipedia.org/wiki/Bcrypt
+[SJCL]: https://github.com/bitwiseshiftleft/sjcl
+[Chrome Webstore]: https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb
