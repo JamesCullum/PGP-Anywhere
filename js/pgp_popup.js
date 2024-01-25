@@ -60,10 +60,14 @@ $(document).ready(function() {
 				}
 			}
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var privateKey = (await openpgp.key.readArmored(goKey)).keys[0];
-			var pgpMessage = await openpgp.message.readArmored(toenc);
-			privateKey.decrypt(keypass).then(function(retdec) {
-				openpgp.decrypt({message:pgpMessage, privateKeys:privateKey}).then(function(plaintext) {
+			const readPrivateKey = await openpgp.readPrivateKey({ armoredKey: goKey });
+			var pgpMessage = await openpgp.readMessage({ armoredMessage: toenc });
+
+			openpgp.decryptKey({ privateKey: readPrivateKey, passphrase: keypass}).then(function(privateKey) {
+				openpgp.decrypt({
+					message: pgpMessage,
+					decryptionKeys: privateKey
+				}).then(function(plaintext) {
 					$("#submitbutton").html(befText).removeClass("disabled");
 					$("#decpgptxt").val(plaintext.data);
 					onkeysel();
@@ -82,15 +86,19 @@ $(document).ready(function() {
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var publicKey = (await openpgp.key.readArmored(goKey)).keys; //[0]
+			const publicKey = await openpgp.readKey({ armoredKey: goKey });
+
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#submitbutton").html(befText).removeClass("disabled");
 				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
 			}
-			openpgp.encrypt({message: openpgp.message.fromText(toenc), publicKeys: publicKey[0]}).then(function(pgpMessage) {
+			openpgp.encrypt({
+				message: await openpgp.createMessage({ text: toenc }),
+				encryptionKeys: publicKey
+			}).then(function(pgpMessage) {
 				$("#submitbutton").html(befText).removeClass("disabled");
-				$("#decpgptxt").val(pgpMessage.data);
+				$("#decpgptxt").val(pgpMessage);
 				onkeysel();
 			}).catch(function(error) {
 				$("#submitbutton").html(befText).removeClass("disabled");
@@ -128,11 +136,15 @@ $(document).ready(function() {
 				}
 			}
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var privateKey = (await openpgp.key.readArmored(goKey)).keys[0];
-			privateKey.decrypt(keypass).then(function(retdec) {
-				openpgp.sign({message:openpgp.message.fromText(toenc), privateKeys:privateKey}).then(function(signed) {
+			const readPrivateKey = await openpgp.readPrivateKey({ armoredKey: goKey });
+			const clearMessage = await openpgp.createCleartextMessage({ text: toenc });
+			openpgp.decryptKey({ privateKey: readPrivateKey, passphrase: keypass}).then(function(privateKey) {
+				openpgp.sign({
+					message: clearMessage,
+					signingKeys: privateKey
+				}).then(function(signed) {
 					$("#altbutton").html(befText).removeClass("disabled");
-					$("#decpgptxt").val(signed.data.trim());
+					$("#decpgptxt").val(signed.trim());
 					onkeysel();
 				}).catch(function(error) {
 					$("#altbutton").html(befText).removeClass("disabled");
@@ -149,22 +161,29 @@ $(document).ready(function() {
 			var goKey = "";
 			for(var i=0;i<container.length;i++) if(container[i].email==infosplit[0]) goKey=container[i].key;
 			if( !goKey.length ) return showAlert(chrome.i18n.getMessage("internal_key_error"), 1);
-			var publicKey = (await openpgp.key.readArmored(goKey)).keys; //[0]
+			const publicKey = await openpgp.readKey({ armoredKey: goKey });
 			if( typeof publicKey == 'undefined' ) 
 			{
 				$("#altbutton").html(befText).removeClass("disabled");
 				return showAlert(chrome.i18n.getMessage("key_incompatible"), 1);
 			}
-			var pgpMessage = await openpgp.message.readArmored(toenc);
-			openpgp.verify({message: pgpMessage, publicKeys: publicKey}).then(function(sigCheck) {
-				//console.log("sigCheck", sigCheck);
+			var pgpMessage = await openpgp.readCleartextMessage({ cleartextMessage: toenc });
+			openpgp.verify({message: pgpMessage, verificationKeys: publicKey}).then(function(sigCheck) {
 				$("#altbutton").html(befText).removeClass("disabled");
-				if(sigCheck.data.length && sigCheck.signatures[0].valid && sigCheck.signatures[0].keyid.toHex() == publicKey[0].primaryKey.keyid.toHex())
+
+				if(!sigCheck.data.length || !sigCheck.signatures) return showAlert(chrome.i18n.getMessage("sig_invalid"), 1);
+
+				const { verified, keyID } = sigCheck.signatures[0];
+				if(keyID.toHex() == publicKey.getKeyID().toHex())
 				{
-					showAlert(chrome.i18n.getMessage("sig_matches"), 2);
-					var insideText = new TextDecoder("utf-8").decode(sigCheck.data);
-					$("#decpgptxt").val(insideText.trim());
-					onkeysel();
+					verified.then(() => {
+						showAlert(chrome.i18n.getMessage("sig_matches"), 2);
+						$("#decpgptxt").val(sigCheck.data.trim());
+						onkeysel();
+					}).catch(err => {
+						console.log("verified", err)
+						showAlert(chrome.i18n.getMessage("sig_invalid"), 1);
+					});
 				}
 				else showAlert(chrome.i18n.getMessage("sig_invalid"), 1);
 			});

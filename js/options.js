@@ -110,14 +110,15 @@ $(document).ready(function() {
 		
 		var createdString = createRandomString(30);
 		var createOptions = {
-			numBits: 2048,
-			userIds: [{name:user}],
+			type: 'ecc',
+        	curve: 'curve25519',
+			userIDs: [{name:user}],
 			passphrase: createdString
 		};
 		
 		openpgp.generateKey(createOptions).then(function(keypair) {
-			var privkey = keypair.privateKeyArmored;
-			var pubkey = keypair.publicKeyArmored;
+			var privkey = keypair.privateKey;
+			var pubkey = keypair.publicKey;
 			
 			savekey(user, pubkey, "");
 			savekey(user, privkey, createdString);

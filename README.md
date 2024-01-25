@@ -15,7 +15,6 @@ The plugin is temporarily not available on the Chrome Webstore due to [@lonesome
 - Open Source
 - Encrypted Cloud Synchronization
 
-[ProtonMail]: https://protonmail.ch/
 [bCrypt]: https://de.wikipedia.org/wiki/Bcrypt
 [SJCL]: https://github.com/bitwiseshiftleft/sjcl
 [Chrome Webstore]: https://chrome.google.com/webstore/detail/pgp-anywhere/cdlcdnmhcodhagbmljapgbjdimjckilb
