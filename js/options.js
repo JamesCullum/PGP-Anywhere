@@ -1,7 +1,7 @@
 var masterpw = "", syncloadcount = 0, syncsetcount = 0, synccounter = 0;
 var bcrypt = new bCrypt();
 
-$(document).ready(function() {
+$(document).ready(async function() {
 	var options = {
 		rules: {
 			activated: {
@@ -17,24 +17,24 @@ $(document).ready(function() {
     };
     $('#inputMasterPassword').pwstrength(options);
 	
-	if( loadval("pgpanywhere_encrypted",0)==1 )
+	if(await loadval("pgpanywhere_encrypted", 0) == 1)
 	{
-		master_auth(function(decpw) {
+		master_auth(async function(decpw) {
 			masterpw = decpw;
 			$("#inputMasterPassword").val(decpw);
 			$("#inputMasterPassword2").val(decpw);
 			$("#inputMasterPassword").pwstrength("forceUpdate");
-			loadkeyrings();
+			await loadkeyrings();
 		});
 	}
-	else loadkeyrings();
+	else await loadkeyrings();
 	
 	$("#addpgpdeckey").keyup(function() {
 		var keyval = $(this).val();
 		if(keyval.indexOf("-----BEGIN PGP PRIVATE KEY BLOCK-----")!=-1) $("#savekeypassword").removeAttr("disabled");
 		else $("#savekeypassword").attr("disabled","disabled");
 	});
-	$("#selectDecKey").change(function() {
+	$("#selectDecKey").change(async function() {
 		var optval = $(this).val();
 		if(optval=="addnew")
 		{
@@ -51,7 +51,7 @@ $(document).ready(function() {
 			var infosplit = optval.split("|");
 			if(infosplit[1] == "0")
 			{
-				var container = openkeyring("private");
+				var container = await openkeyring("private");
 				for(var i=0;i<container.length;i++) 
 				{
 					if( container[i].email == infosplit[0] ) 
@@ -65,7 +65,7 @@ $(document).ready(function() {
 			}
 			else 
 			{
-				var container = openkeyring("public");
+				var container = await openkeyring("public");
 				for(var i=0;i<container.length;i++) 
 				{
 					if( container[i].email == infosplit[0] ) 
@@ -116,12 +116,12 @@ $(document).ready(function() {
 			passphrase: createdString
 		};
 		
-		openpgp.generateKey(createOptions).then(function(keypair) {
+		openpgp.generateKey(createOptions).then(async function(keypair) {
 			var privkey = keypair.privateKey;
 			var pubkey = keypair.publicKey;
 			
-			savekey(user, pubkey, "");
-			savekey(user, privkey, createdString);
+			await savekey(user, pubkey, "");
+			await savekey(user, privkey, createdString);
 			
 			$("#generatekey").html(befText)
 			$("#addpgpdeckey, #inputEmail, #generatekey, #addbutton, #submitbutton, #flushbutton").removeClass("disabled").removeAttr("disabled");
@@ -131,22 +131,22 @@ $(document).ready(function() {
 		});
 	});	
 	
-	$("#removebutton").click(function(e) {
+	$("#removebutton").click(async function(e) {
 		e.preventDefault();
 		
 		var remindex = $("#selectDecKey").val();
 		var infosplit = remindex.split("|");
-		if(infosplit[1] == "0") var container = openkeyring("private");
-		else var container = openkeyring("public");
+		if(infosplit[1] == "0") var container = await openkeyring("private");
+		else var container = await openkeyring("public");
 		for(var i=container.length-1;i>=0;i--) if( container[i].email == infosplit[0] ) container.splice(i,1);
-		if(infosplit[1] == "0") savekeyring("private",container);
-		else savekeyring("public",container);
+		if(infosplit[1] == "0") await savekeyring("private",container);
+		else await savekeyring("public",container);
 		
 		$("option[value='"+remindex+"']","#selectDecKey").remove();
 		$("#savekeypassword, #inputEmail, #addpgpdeckey").val("");
 		$("#selectDecKey").change();
 	});
-	$("#addbutton").click(function(e) {
+	$("#addbutton").click(async function(e) {
 		e.preventDefault();
 		
 		if( $(this).hasClass("btn-primary") )
@@ -156,7 +156,7 @@ $(document).ready(function() {
 			var key = $("#addpgpdeckey").val();
 			if(!email) return;
 			
-			savekey(email, key, pass);
+			await savekey(email, key, pass);
 			$("#inputEmail, #addpgpdeckey, #savekeypassword").val("");
 		}
 		else
@@ -186,31 +186,31 @@ $(document).ready(function() {
 		$(".modal").hide();
 		$(".modal-body .well").text("");
 	});
-	$("#flushbutton").click(function(e) {
+	$("#flushbutton").click(async function(e) {
 		e.preventDefault();
 		if(confirm(chrome.i18n.getMessage("delete_confirm")))
 		{
-			chrome.storage.sync.clear();
-			localStorage.clear(); 
-			window.location=window.location;
+			await chrome.storage.sync.clear();
+			await chrome.storage.local.clear();
+			window.location = window.location;
 		}
 	});
-	$("#submitbutton").click(function(e) {
+	$("#submitbutton").click(async function(e) {
 		e.preventDefault();
 		
 		var encpw = $("#inputMasterPassword").val();
 		if( encpw != $("#inputMasterPassword2").val() ) return alert(chrome.i18n.getMessage("password_no_match"));
 		var encrypted = encpw.length ? 1 : 0;
-		var temp_public = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_public_keyring","[]")) : loadval("pgpanywhere_public_keyring","[]");
-		var temp_private = (loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,loadval("pgpanywhere_private_keyring","[]")) : loadval("pgpanywhere_private_keyring","[]");
-		temp_public_save = encpw.length ? sjcl.encrypt(encpw, temp_public) : temp_public;
-		temp_private_save = encpw.length ? sjcl.encrypt(encpw, temp_private) : temp_private;
+		var temp_public = (await loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,await loadval("pgpanywhere_public_keyring","[]")) : await loadval("pgpanywhere_public_keyring","[]");
+		var temp_private = (await loadval("pgpanywhere_encrypted",0)==1) ? sjcl.decrypt(masterpw,await loadval("pgpanywhere_private_keyring","[]")) : await loadval("pgpanywhere_private_keyring","[]");
+		var temp_public_save = encpw.length ? sjcl.encrypt(encpw, temp_public) : temp_public;
+		var temp_private_save = encpw.length ? sjcl.encrypt(encpw, temp_private) : temp_private;
 		
 		$("#submitbutton").attr("disabled","disabled");
 		masterpw = encpw;
-		localStorage.setItem("pgpanywhere_encrypted", encrypted);
-		localStorage.setItem("pgpanywhere_public_keyring", temp_public_save);
-		localStorage.setItem("pgpanywhere_private_keyring", temp_private_save);
+		await setval("pgpanywhere_encrypted", encrypted);
+		await setval("pgpanywhere_public_keyring", temp_public_save);
+		await setval("pgpanywhere_private_keyring", temp_private_save);
 		chrome.runtime.sendMessage({ msg: "unlock", "auth": masterpw });
 		
 		if(encrypted)
@@ -220,15 +220,15 @@ $(document).ready(function() {
 			
 			// Hash-Generation
 			var hashtype = 2; //always bCrypt
-			createhash( encpw, hashtype, function(encrypted_hash) {
+			createhash( encpw, hashtype, async function(encrypted_hash) {
 				var settingscontainer = {"encrypted":encrypted, "hash":encrypted_hash};
-				localStorage.setItem("pgpanywhere_encrypted_hash", encrypted_hash );
+				await setval("pgpanywhere_encrypted_hash", encrypted_hash );
 				
 				addSyncElement(6);
 				chrome.storage.sync.set({"pgpanywhere_sync_container_settings": JSON.stringify(settingscontainer)}, function() { onsyncset(); });
 				
 				// Public Keys
-				var container = openkeyring("public");
+				var container = await openkeyring("public");
 				addSyncElement(container.length);
 				for(var i=0;i<container.length;i++)
 				{
@@ -241,7 +241,7 @@ $(document).ready(function() {
 				chrome.storage.sync.set({"pgpanywhere_sync_public_list": container.length}, function() { onsyncset(); });
 				
 				// Private Keys
-				var container = openkeyring("private");
+				var container = await openkeyring("private");
 				addSyncElement(container.length);
 				for(var i=0;i<container.length;i++)
 				{
@@ -265,29 +265,29 @@ $(document).ready(function() {
 	});
 });
 
-function savekey(email, key, pass)
+async function savekey(email, key, pass)
 {
 	if( key.indexOf('-----BEGIN PGP PRIVATE KEY BLOCK-----') != -1 )
 	{
-		var container = openkeyring("private");
+		var container = await openkeyring("private");
 		for(var i=container.length-1;i>=0;i--) if( container[i].email == email ) container.splice(i,1);
 		var addobj = {"email":email, "key":key, "password": pass};
 		container.push(addobj);
-		savekeyring("private",container);
+		await savekeyring("private",container);
 	}
 	else if( key.indexOf('-----BEGIN PGP PUBLIC KEY BLOCK-----') != -1 )
 	{
-		var container = openkeyring("public");
+		var container = await openkeyring("public");
 		for(var i=container.length-1;i>=0;i--) if( container[i].email == email ) container.splice(i,1);
 		var addobj = {"email":email, "key":key};
 		container.push(addobj);
-		savekeyring("public",container);
+		await savekeyring("public",container);
 	}
 	else alert(chrome.i18n.getMessage("invalid_key"));
 	
 	$("#selectDecKey").html('');
 	$("#selectDecKey").append('<option value="addnew">'+chrome.i18n.getMessage("add_key")+'</option>');
-	loadkeyrings();
+	await loadkeyrings();
 	$("#selectDecKey").change();
 }
 
@@ -305,16 +305,16 @@ function getAlias()
 	return user;
 }
 
-function loadkeyrings()
+async function loadkeyrings()
 {
-	var container = openkeyring("private");
+	var container = await openkeyring("private");
 	if(container.length)
 	{
 		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("private_key_label")+'" id="privateKeyGroup"></div>');
 		for(var i=0;i<container.length;i++) $("#privateKeyGroup").append('<option value="'+container[i].email+'|0">'+container[i].email+'</option>');
 	}
 	
-	var container = openkeyring("public");
+	var container = await openkeyring("public");
 	if(container.length)
 	{
 		$("#selectDecKey").append('<optgroup label="'+chrome.i18n.getMessage("public_key_label")+'" id="publicKeyGroup"></div>');
@@ -322,27 +322,38 @@ function loadkeyrings()
 	}
 }
 
-function openkeyring(type)
+async function openkeyring(type)
 {
-	var container = loadval("pgpanywhere_"+type+"_keyring","[]");
-	if(loadval("pgpanywhere_encrypted",0)==1 && container.indexOf('"iv":') != -1) container = sjcl.decrypt(masterpw,container);
+	var container = await loadval("pgpanywhere_"+type+"_keyring","[]");
+	if(await loadval("pgpanywhere_encrypted",0)==1 && container.indexOf('"iv":') != -1) container = sjcl.decrypt(masterpw,container);
 	if(!container.length || container=="[]") container = [];
 	else container = jQuery.parseJSON(container);
 	return container;
 }
 
-function savekeyring(type,array)
+async function savekeyring(type,array)
 {
 	var container = JSON.stringify(array);
-	if(loadval("pgpanywhere_encrypted",0)==1) container = sjcl.encrypt(masterpw,container);
-	localStorage.setItem("pgpanywhere_"+type+"_keyring", container);
+	if(await loadval("pgpanywhere_encrypted",0)==1) container = sjcl.encrypt(masterpw,container);
+	await setval("pgpanywhere_"+type+"_keyring", container);
 }
 
-function loadval(key,def)
+async function loadval(key, def)
 {
-	var retval = localStorage.getItem(key);
-	if( retval == undefined ) retval = def;
+	var retval = await chrome.storage.local.get([key]);
+	if(key in retval) retval = retval[key];
+	else retval = def;
+
+	if(retval == "true") retval = true;
+	else if(retval == "false") retval = false;
 	return retval;
+}
+
+async function setval(key, val) 
+{
+	const saveObj = {}
+	saveObj[key] = val
+	return (await chrome.storage.local.set(saveObj))
 }
 
 function addSyncElement(add)

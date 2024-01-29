@@ -1,27 +1,27 @@
 var bcrypt = new bCrypt();
 
-$(document).ready(function() {
-	if( loadval("pgpanywhere_encrypted",0)!=1 ) closeme();
+$(document).ready(async function() {
+	if(await loadval("pgpanywhere_encrypted", 0) != 1) closeme();
 	$("#decmasterpw").focus();
 
-	$("#dellog").click(function() {
+	$("#dellog").click(async function() {
 		if(confirm(chrome.i18n.getMessage("delete_confirm")))
 		{
-			chrome.storage.sync.clear();
-			localStorage.clear();
+			await chrome.storage.sync.clear();
+			await chrome.storage.local.clear();
 			window.location = "options.html";
 		}
 	});
-	$("#declogin").click(function() {
+	$("#declogin").click(async function() {
 		var decpw = $("#decmasterpw").val();
 		if( decpw.length == 0 ) return;
 		
 		$("#declogin").attr("disabled","disabled");
-		checkhash(decpw,loadval("pgpanywhere_encrypted_hash",false), function(result) {
+		checkhash(decpw, await loadval("pgpanywhere_encrypted_hash",false), async function(result) {
 			if(result)
 			{
 				// Check public queue
-				var queue = loadval("pgpanywhere_sync_public_queue", "");
+				var queue = await loadval("pgpanywhere_sync_public_queue", "");
 				if(queue.length)
 				{
 					queue = jQuery.parseJSON(queue);
@@ -33,12 +33,12 @@ $(document).ready(function() {
 						container[i] = jQuery.parseJSON(sjcl.decrypt(decpw, queue[i]));
 					}
 					var temp_public_save = JSON.stringify(container);
-					localStorage.setItem("pgpanywhere_public_keyring", sjcl.encrypt(decpw, temp_public_save));
-					localStorage.setItem("pgpanywhere_sync_public_queue", "");
+					await setval("pgpanywhere_public_keyring", sjcl.encrypt(decpw, temp_public_save));
+					await setval("pgpanywhere_sync_public_queue", "");
 				}
 				
 				// Check private queue
-				queue = loadval("pgpanywhere_sync_private_queue", "");
+				queue = await loadval("pgpanywhere_sync_private_queue", "");
 				if(queue.length)
 				{
 					queue = jQuery.parseJSON(queue);
@@ -49,8 +49,8 @@ $(document).ready(function() {
 						container[i] = jQuery.parseJSON(sjcl.decrypt(decpw, queue[i]));
 					}
 					var temp_public_save = JSON.stringify(container);
-					localStorage.setItem("pgpanywhere_private_keyring", sjcl.encrypt(decpw, temp_public_save));
-					localStorage.setItem("pgpanywhere_sync_private_queue", "");
+					await setval("pgpanywhere_private_keyring", sjcl.encrypt(decpw, temp_public_save));
+					await setval("pgpanywhere_sync_private_queue", "");
 				}
 				
 				chrome.runtime.sendMessage({ msg: "unlock", "auth": decpw });
@@ -68,13 +68,22 @@ $(document).ready(function() {
 	});
 });
 
-function loadval(key,def)
+async function loadval(key, def)
 {
-	var retval = localStorage.getItem(key);
-	if( retval == undefined ) retval = def;
+	var retval = await chrome.storage.local.get([key]);
+	if(key in retval) retval = retval[key];
+	else retval = def;
+
 	if(retval == "true") retval = true;
 	else if(retval == "false") retval = false;
 	return retval;
+}
+
+async function setval(key, val) 
+{
+	const saveObj = {}
+	saveObj[key] = val
+	return (await chrome.storage.local.set(saveObj))
 }
 
 function closeme()

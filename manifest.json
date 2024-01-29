@@ -1,5 +1,5 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 
 	"name": "PGP Anywhere",
 	"description": "__MSG_manifest_description__",
@@ -12,11 +12,11 @@
 		"128": "img/favicon_128.png"
 	},
 	"options_page": "html/options.html",
-	"browser_action": { "default_icon": "img/favicon_19.png", "default_popup": "html/popup.html" },
+	"action": { "default_icon": "img/favicon_19.png", "default_popup": "html/popup.html" },
 	"permissions": [
 		"storage",
 		"identity",
 		"identity.email"
 	],
-	"background": { "scripts":["js/jquery.min.js","js/background.js"] }
+	"background": { "service_worker": "js/background.js" }
 }
